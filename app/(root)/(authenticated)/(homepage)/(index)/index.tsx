@@ -9,16 +9,19 @@ import {
     SafeAreaView,
     ScrollView,
     RefreshControl,
+    Modal
 } from "react-native";
 import d2 from "@/constants/ExampleData";
 import { useEffect, useState } from "react";
 import DraggableFlatList from "react-native-draggable-flatlist";
 import index from "@/app/(root)/(unauthenticated)";
 import { useAuth } from "@/contexts/AuthProvider";
+import TopSideRender from "@/components/HomePageComponents/TopSideRender";
+import BottomSideRender from "@/components/HomePageComponents/BottomSideRender";
 function createRandomData(): SentenceData {
     let data: SentenceData[] = d2;
     let selectedData = data[Math.floor(Math.random() * data.length)];
-    return selectedData;
+    return data[0];
 }
 export default function TabOneScreen() {
 
@@ -73,7 +76,7 @@ export default function TabOneScreen() {
         return (
             <View
                 style={{
-                    minHeight: 200,
+                    minHeight: 100,
                     padding: 15,
                     borderColor: 'black',
                     borderBottomWidth: 1,
@@ -126,7 +129,7 @@ export default function TabOneScreen() {
         return (
             <View
                 style={{
-                    minHeight: 200,
+                    minHeight: 100,
                     padding: 15,
                     marginTop: 30, // 'top' yerine 'marginTop' kullanmak daha yaygın bir yöntemdir
                     borderColor: "gray",
@@ -209,19 +212,22 @@ export default function TabOneScreen() {
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 }
             >
-                <Text>toplam score : {score}</Text>
+                <View style={{ width: '100%' }}>
+                    {/* bunu yazmamızın amacı style olarak ortaladıgımız için ben direk full kaplasın istiyorum kalan yerleri */}
+                    <TopSideRender randomData={randomData} score={score} />
+                </View>
                 <View style={styles.container}>
                     <View style={styles.titleContainer}>
                         <Text style={styles.title}>{randomData?.wordEng}</Text>
                     </View>
-                    <View>{renderGetAnswerData()}</View>
-                    <View>{renderSetAnswerData()}</View>
-                </View>
-                <View style={styles.buttonsContainer}>
-                    <Pressable style={[styles.customButton, { backgroundColor: 'lightblue' }]} onPress={refresh}><Text>Yenile</Text></Pressable>
-                    <Pressable style={[styles.customButton, { backgroundColor: 'lightgreen' }]} onPress={handleButtonPress}><Text>Kontrol ET</Text></Pressable>
+                    {renderGetAnswerData()}
+                    {renderSetAnswerData()}
                 </View>
 
+                <View style={{ width: '100%' }}>
+                    {/* bunu yazmamızın amacı style olarak ortaladıgımız için ben direk full kaplasın istiyorum kalan yerleri */}
+                    <BottomSideRender refresh={refresh} handleButtonPress={handleButtonPress} />
+                </View>
             </ScrollView>
         </SafeAreaView>
     );
@@ -235,15 +241,8 @@ function shuffle(array: any[]) {
 }
 
 const styles = StyleSheet.create({
-    buttonsContainer: {
-        display: 'flex', flexDirection: 'row', gap: 15
-    },
-    customButton: {
-        borderWidth: 1,
-        paddingHorizontal: 35,
-        paddingVertical: 10,
-        borderRadius: 15
-    },
+
+
     container: {
         flex: 1,
     },
@@ -253,12 +252,11 @@ const styles = StyleSheet.create({
         flexGrow: 1,
     },
     titleContainer: {
-        minHeight: 100,
+        minHeight: 50,
         padding: 15,
     },
     title: {
         marginTop: 20,
-
         fontSize: 20,
         fontWeight: "bold",
     },
@@ -272,11 +270,6 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         marginBottom: 20,
     },
-    resultContainer: {
-        padding: 15,
-        height: 300,
-    },
-
     resultText: {
         fontSize: 16,
     },
