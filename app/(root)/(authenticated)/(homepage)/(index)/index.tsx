@@ -21,7 +21,7 @@ import BottomSideRender from "@/components/HomePageComponents/BottomSideRender";
 function createRandomData(): SentenceData {
     let data: SentenceData[] = d2;
     let selectedData = data[Math.floor(Math.random() * data.length)];
-    return data[0];
+    return selectedData;
 }
 export default function TabOneScreen() {
 
@@ -31,6 +31,12 @@ export default function TabOneScreen() {
     const [shuffledResults, setShuffledResults] = useState<any[]>([]);
     const [answerData, setAnswerData] = useState<any[]>([]);
     const [refreshing, setRefreshing] = useState(false);
+
+
+
+    const [modalVisible, setModalVisible] = useState(false);
+    const [modalMessage, setModalMessage] = useState('');
+
 
     useEffect(() => {
         refresh();
@@ -60,15 +66,16 @@ export default function TabOneScreen() {
             let realData = randomData?.wordEngAryResult[i];
             let ourData = answerData[i];
             if (realData?.toString().toLowerCase() !== ourData?.toString().toLowerCase()) {
-                control = false;
+                control = true;
             }
         }
         if (control) {
-            alert("Congratulations! You have completed the test. Please  refresh  to start a new test.")
+            setModalMessage('Congratulations! You have completed the test. Please refresh to start a new test.');
+            setModalVisible(true);
             await increaseTheScore!(100);
-        }
-        else {
-            alert("Please try again.")
+        } else {
+            setModalMessage('Please try again.');
+            setModalVisible(true);
         }
     };
 
@@ -228,6 +235,31 @@ export default function TabOneScreen() {
                     {/* bunu yazmamızın amacı style olarak ortaladıgımız için ben direk full kaplasın istiyorum kalan yerleri */}
                     <BottomSideRender refresh={refresh} handleButtonPress={handleButtonPress} />
                 </View>
+
+
+
+
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                        setModalVisible(!modalVisible);
+                    }}>
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalView}>
+                            <Text style={styles.modalText}>{modalMessage}</Text>
+                            <Pressable
+                                style={[styles.button, styles.buttonClose]}
+                                onPress={() => {
+                                    setModalVisible(!modalVisible);
+                                    refresh();
+                                }}>
+                                <Text style={styles.textStyle}>Yeni Soru Gec</Text>
+                            </Pressable>
+                        </View>
+                    </View>
+                </Modal>
             </ScrollView>
         </SafeAreaView>
     );
@@ -241,7 +273,45 @@ function shuffle(array: any[]) {
 }
 
 const styles = StyleSheet.create({
-
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0,0,0,0.5)',
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    button: {
+        borderRadius: 10,
+        padding: 10,
+        elevation: 2,
+    },
+    buttonClose: {
+        backgroundColor: '#2196F3',
+    },
+    textStyle: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: 'center',
+        fontSize: 18,
+    },
 
     container: {
         flex: 1,
