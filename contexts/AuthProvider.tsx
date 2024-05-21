@@ -16,10 +16,10 @@ interface AuthProps {
         refreshToken: string | null;
         authenticated: boolean | null;
     };
-    loading?: boolean;
-    setLoadingScreen?: React.Dispatch<React.SetStateAction<boolean>>
     onGoogleLogin?: () => Promise<any>;
     onLogout?: () => Promise<any>;
+    score?: number;
+    increaseTheScore?: (value: number) => Promise<any>;
 }
 
 // AuthProvider bileşeni ile context için bir value sağlıyoruz ve çocuk bileşenleri sarmalıyoruz
@@ -34,8 +34,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         accessToken: null,
         refreshToken: null,
         authenticated: null,
+
     });
-    const [loading, setLoadingScreen] = useState(true)
+    const [score, setScore] = useState<number>(0)
 
     useEffect(() => {
         setTimeout(() => {
@@ -45,9 +46,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
                 refreshToken: ""
             })
         }, 1000);
+
+        SecureStore.getItemAsync('score')
+            .then((score: string | null) => {
+                if (score)
+                    setScore(parseInt(score))
+                else
+                    console.log('Score not found in secureStore: ');
+            })
+            .catch((error) => {
+                console.log('Error ', error);
+            });
+
     }, []);
 
-
+    const setScoreForSecureStore = async (newScore: Number) => {
+        await SecureStore.setItemAsync('score', newScore.toString())
+    }
+    const increaseTheScore = async (value: number) => {
+        try {
+            let result = score + value;
+            setScore(result);
+            await setScoreForSecureStore(result)
+        }
+        catch (e) {
+            console.log(e);
+        }
+    }
 
 
     const onGoogleLogin = async () => {
@@ -86,7 +111,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
     return (
         <AuthContext.Provider
-            value={{ authState, onLogout, onGoogleLogin, setLoadingScreen, loading }}
+            value={{ authState, onLogout, onGoogleLogin, score, increaseTheScore }}
         >
             {children}
         </AuthContext.Provider>

@@ -14,12 +14,15 @@ import d2 from "@/constants/ExampleData";
 import { useEffect, useState } from "react";
 import DraggableFlatList from "react-native-draggable-flatlist";
 import index from "@/app/(root)/(unauthenticated)";
+import { useAuth } from "@/contexts/AuthProvider";
 function createRandomData(): SentenceData {
     let data: SentenceData[] = d2;
     let selectedData = data[Math.floor(Math.random() * data.length)];
     return selectedData;
 }
 export default function TabOneScreen() {
+
+    const { increaseTheScore, score } = useAuth();
 
     const [randomData, setRandomData] = useState<SentenceData>();
     const [shuffledResults, setShuffledResults] = useState<any[]>([]);
@@ -44,7 +47,7 @@ export default function TabOneScreen() {
         refresh();
         setRefreshing(false);
     };
-    const handleButtonPress = () => {
+    const handleButtonPress = async () => {
         let control = true;
         // control edicek 
         if (!(randomData || answerData))
@@ -59,6 +62,7 @@ export default function TabOneScreen() {
         }
         if (control) {
             alert("Congratulations! You have completed the test. Please  refresh  to start a new test.")
+            await increaseTheScore!(100);
         }
         else {
             alert("Please try again.")
@@ -94,10 +98,24 @@ export default function TabOneScreen() {
                     return (
                         <Pressable
                             key={index}
-                            style={{ borderWidth: 1, padding: 10, borderRadius: 35 }}
+                            style={({ pressed }) => [
+                                {
+                                    borderWidth: 1,
+                                    padding: 10,
+                                    borderRadius: 35,
+                                    backgroundColor: pressed ? '#e0f7fa' : '#ffffff',
+                                    borderColor: pressed ? '#00796b' : '#00796b',
+
+                                    shadowColor: '#000',
+                                    shadowOffset: { width: 0, height: 2 },
+                                    shadowOpacity: 0.2,
+                                    shadowRadius: 2,
+                                    elevation: 2, // Android için gölge efekti
+                                },
+                            ]}
                             onPress={() => addToShuffledData(index)}
                         >
-                            <Text style={{ fontSize: 20, color: "red" }}>{item}</Text>
+                            <Text style={{ fontSize: 20, color: "#00796b" }}>{item}</Text>
                         </Pressable>
                     );
                 })) : (<Text style={{ fontSize: 21, padding: 3, borderBottomColor: 'gray', borderBottomWidth: 1 }}>Please click on the words below. </Text>)}
@@ -110,13 +128,13 @@ export default function TabOneScreen() {
                 style={{
                     minHeight: 200,
                     padding: 15,
-                    top: 30,
+                    marginTop: 30, // 'top' yerine 'marginTop' kullanmak daha yaygın bir yöntemdir
                     borderColor: "gray",
                     borderBottomWidth: 1,
                     display: "flex",
                     flexDirection: "row",
                     flexWrap: "wrap",
-                    gap: 10,
+                    gap: 10, // 'gap' property sadece webde çalışıyor. Onun yerine 'margin' kullanabiliriz
                     alignContent: "center",
                     justifyContent: "center",
                 }}
@@ -133,10 +151,24 @@ export default function TabOneScreen() {
                         return (
                             <Pressable
                                 key={index}
-                                style={{ borderWidth: 1, padding: 10, borderRadius: 35 }}
+                                style={({ pressed }) => [
+                                    {
+                                        borderWidth: 1,
+                                        padding: 10,
+                                        borderRadius: 35,
+                                        backgroundColor: pressed ? '#ffcc80' : '#ffffff',
+                                        borderColor: pressed ? '#e65100' : '#e65100',
+
+                                        shadowColor: '#000',
+                                        shadowOffset: { width: 0, height: 2 },
+                                        shadowOpacity: 0.2,
+                                        shadowRadius: 2,
+                                        elevation: 2, // Android için gölge efekti
+                                    },
+                                ]}
                                 onPress={() => addToAnswerData(index)}
                             >
-                                <Text style={{ fontSize: 20, color: "red" }}>{item}</Text>
+                                <Text style={{ fontSize: 20, color: "#e65100" }}>{item}</Text>
                             </Pressable>
                         );
                     })}
@@ -177,6 +209,7 @@ export default function TabOneScreen() {
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 }
             >
+                <Text>toplam score : {score}</Text>
                 <View style={styles.container}>
                     <View style={styles.titleContainer}>
                         <Text style={styles.title}>{randomData?.wordEng}</Text>
