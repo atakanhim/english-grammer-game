@@ -1,4 +1,4 @@
-{
+export default {
   "expo": {
     "name": "gramergame",
     "slug": "gramergame",
@@ -15,11 +15,11 @@
     "ios": {
       "bundleIdentifier": "com.hm.gramergame",
       "supportsTablet": true,
-      "googleServicesFile": "./gsios.plist"
+      "googleServicesFile": process.env.GOOGLE_SERVICES_INFOPLIST
     },
     "android": {
       "package": "com.hm.gramergame",
-      "googleServicesFile": "./gsandroid.json",
+      "googleServicesFile": process.env.GOOGLE_SERVICES_JSON,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
