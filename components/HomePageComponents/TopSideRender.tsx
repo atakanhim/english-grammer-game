@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: 10,
-        backgroundColor: '#f8f8f8',
         borderBottomWidth: 1,
         borderBottomColor: '#ddd',
     },
@@ -47,6 +46,7 @@ const styles = StyleSheet.create({
     },
     value: {
         fontSize: 16,
+        fontWeight: '900',
         color: '#000',
         marginBottom: 5,
     },

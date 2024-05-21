@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "413146979081",
+    "project_id": "gramergame",
+    "storage_bucket": "gramergame.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:413146979081:android:3d97b1f088420368f091d8",
+        "android_client_info": {
+          "package_name": "com.hm.grammergame"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "413146979081-0hetm36j44s8cegrc35egtr301tn8tr0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hm.grammergame",
+            "certificate_hash": "d215dfd4c5668de1ac0b3a3a9f9bb175004b31de"
+          }
+        },
+        {
+          "client_id": "413146979081-5hkrg1lhmta52o39m09d2u93cia0llna.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCc_8K48IO0s-6aM75CbRPyg3lOyQCLN-U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "413146979081-5hkrg1lhmta52o39m09d2u93cia0llna.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "413146979081-5t6usnhj08fvvmohcd1crc05er89d6n7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.hm.grammergame"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

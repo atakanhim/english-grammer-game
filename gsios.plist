@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>413146979081-5t6usnhj08fvvmohcd1crc05er89d6n7.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.413146979081-5t6usnhj08fvvmohcd1crc05er89d6n7</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>413146979081-0hetm36j44s8cegrc35egtr301tn8tr0.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDtYbw42rQ536dMpzNWv2i8bt0h4IvQBYU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>413146979081</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.hm.grammergame</string>
+	<key>PROJECT_ID</key>
+	<string>gramergame</string>
+	<key>STORAGE_BUCKET</key>
+	<string>gramergame.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:413146979081:ios:72a53128d3417c85f091d8</string>
+</dict>
+</plist>

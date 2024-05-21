@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 import { useRouter } from "expo-router";
+import { TokenResponse } from "@/constants/types";
 // // import { GoogleSignin } from "@react-native-google-signin/google-signin";
 const TOKEN_KEY = process.env.EXPO_PUBLIC_TOKEN_KEY ?? " ";
 const API_URL = process.env.EXPO_PUBLIC_API_URL ?? " ";
@@ -16,7 +17,7 @@ interface AuthProps {
         refreshToken: string | null;
         authenticated: boolean | null;
     };
-    onGoogleLogin?: () => Promise<any>;
+    onGoogleLogin?: (idToken: string | null) => Promise<any>;
     onLogout?: () => Promise<any>;
     score?: number;
     increaseTheScore?: (value: number) => Promise<any>;
@@ -75,19 +76,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
 
 
-    const onGoogleLogin = async () => {
-
+    const onGoogleLogin = async (idToken: string | null) => {
         try {
 
-            setAuthState((prev) => {
-                return { ...prev, authenticated: true }
+            const result: any = await axios.post(`${API_URL}/Auth/google-login`, {
+                idToken: idToken, // Kullanıcının gerçek adı veya e-posta adresi buraya
+            });
+            console.log("result:", result);
+
+            setAuthState({
+                accessToken: result.data.token.accessToken,
+                refreshToken: result.data.token.refreshToken,
+                authenticated: true
             });
 
+            axios.defaults.headers.common['Authorization'] = `Bearer ${result.data.token.accessToken}`
+            await SecureStore.setItemAsync(TOKEN_KEY, result.data.token.accessToken)
 
+            return result;
         } catch (e) {
             console.log(e);
         }
     };
+
 
     const onLogout = async () => {
         // Kullanıcı çıkış işlemleri...
