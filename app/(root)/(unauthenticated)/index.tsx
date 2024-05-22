@@ -1,27 +1,36 @@
-import { View, Text, Pressable } from 'react-native'
-import React from 'react'
+import { View, Text, Pressable, Button } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { Link, useRouter } from 'expo-router'
 import { useAuth } from '@/contexts/AuthProvider';
+import { GoogleSignin, GoogleSigninButton, User } from '@react-native-google-signin/google-signin';
 
 const index = () => {
     const router = useRouter();
     const { authState, onGoogleLogin } = useAuth();
+    const [error, setError] = useState<any>()
 
-    const handleLoginPress = async () => {
-        await onGoogleLogin!();
-        router.replace('(authenticated)');
-    };
+    const signIn = async () => {
+        try {
+            await onGoogleLogin!();
+            router.replace('(authenticated)');
+        } catch (error) {
+            setError(error);
+        }
+    }
+
     return (
-        <View>
-
-            <Pressable onPress={handleLoginPress}>
-                {({ pressed }) => (
-                    <Text style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}>login</Text>
-                )}
-            </Pressable>
-
+        <View style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+        }}>
+            <GoogleSigninButton
+                size={GoogleSigninButton.Size.Standard}
+                color={GoogleSigninButton.Color.Dark}
+                onPress={signIn}
+            />
         </View>
-    )
+    );
 }
 
 export default index

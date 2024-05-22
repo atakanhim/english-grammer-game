@@ -25,8 +25,6 @@ function createRandomData(): SentenceData {
 }
 export default function TabOneScreen() {
 
-    const { increaseTheScore, score } = useAuth();
-
     const [randomData, setRandomData] = useState<SentenceData>();
     const [shuffledResults, setShuffledResults] = useState<any[]>([]);
     const [answerData, setAnswerData] = useState<any[]>([]);
@@ -66,13 +64,14 @@ export default function TabOneScreen() {
             let realData = randomData?.wordEngAryResult[i];
             let ourData = answerData[i];
             if (realData?.toString().toLowerCase() !== ourData?.toString().toLowerCase()) {
-                control = true;
+                control = false;
             }
         }
+
+        control = true; // deneme icin true false almayı unutma
         if (control) {
             setModalMessage('Congratulations! You have completed the test. Please refresh to start a new test.');
             setModalVisible(true);
-            await increaseTheScore!(100);
         } else {
             setModalMessage('Please try again.');
             setModalVisible(true);
@@ -221,7 +220,7 @@ export default function TabOneScreen() {
             >
                 <View style={{ width: '100%' }}>
                     {/* bunu yazmamızın amacı style olarak ortaladıgımız için ben direk full kaplasın istiyorum kalan yerleri */}
-                    <TopSideRender randomData={randomData} score={score} />
+                    <TopSideRender randomData={randomData} score={1111} />
                 </View>
                 <View style={styles.container}>
                     <View style={styles.titleContainer}>

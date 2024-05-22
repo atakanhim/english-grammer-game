@@ -13,13 +13,8 @@ const Layout = () => {
     const { authState } = useAuth();
 
     useEffect(() => {
-        console.log(authState?.authenticated);
-
         if (authState?.authenticated == true) {
             router.replace("/")
-        }
-        else if (authState?.authenticated == false) {
-            router.replace("(unauthenticated)")
         }
     }, [authState])
 

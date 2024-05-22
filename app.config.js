@@ -13,12 +13,12 @@ export default {
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "bundleIdentifier": "com.hm.gramergame",
+      "bundleIdentifier": "com.hm.grammergame",
       "supportsTablet": true,
       "googleServicesFile": process.env.GOOGLE_SERVICES_INFOPLIST
     },
     "android": {
-      "package": "com.hm.gramergame",
+      "package": "com.hm.grammergame",
       "googleServicesFile": process.env.GOOGLE_SERVICES_JSON,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
@@ -32,7 +32,8 @@ export default {
     },
     "plugins": [
       "expo-router",
-      "@react-native-google-signin/google-signin"
+      "@react-native-google-signin/google-signin",
+      
     ],
     "experiments": {
       "typedRoutes": true

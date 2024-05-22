@@ -2,25 +2,22 @@ import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 import { useRouter } from "expo-router";
-import { TokenResponse } from "@/constants/types";
-// // import { GoogleSignin } from "@react-native-google-signin/google-signin";
-const TOKEN_KEY = process.env.EXPO_PUBLIC_TOKEN_KEY ?? " ";
-const API_URL = process.env.EXPO_PUBLIC_API_URL ?? " ";
+import { TokenResponse, Token } from "@/constants/Types";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { loginWithGoogle, logout } from "@/services/apiService";
+
+const ACC_TOKEN_KEY = process.env.EXPO_PUBLIC_ACCESS_TOKEN_KEY ?? " ";
+const REF_TOKEN_KEY = process.env.EXPO_PUBLIC_REFRESH_TOKEN_KEY ?? " ";
+const USER_ID = process.env.EXPO_PUBLIC_USER_ID ?? " ";
 
 const AuthContext = createContext<Partial<AuthProps>>({});
-
-
-
 interface AuthProps {
     authState: {
-        accessToken: string | null;
-        refreshToken: string | null;
+        id: number | null,
         authenticated: boolean | null;
     };
-    onGoogleLogin?: (idToken: string | null) => Promise<any>;
+    onGoogleLogin?: () => Promise<any>;
     onLogout?: () => Promise<any>;
-    score?: number;
-    increaseTheScore?: (value: number) => Promise<any>;
 }
 
 // AuthProvider bileşeni ile context için bir value sağlıyoruz ve çocuk bileşenleri sarmalıyoruz
@@ -28,101 +25,85 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     children,
 }) => {
     const [authState, setAuthState] = useState<{
-        accessToken: string | null;
-        refreshToken: string | null;
         authenticated: boolean | null;
+        id: number | null;
     }>({
-        accessToken: null,
-        refreshToken: null,
-        authenticated: null,
-
+        id: null,
+        authenticated: null
     });
-    const [score, setScore] = useState<number>(0)
 
     useEffect(() => {
-        setTimeout(() => {
-            setAuthState({
-                accessToken: "",
-                authenticated: true,
-                refreshToken: ""
-            })
-        }, 1000);
+        const bootstrapAsync = async () => {
+            try {
+                GoogleSignin.configure({
+                    webClientId:
+                        "413146979081-5hkrg1lhmta52o39m09d2u93cia0llna.apps.googleusercontent.com",
+                });
+                // AuthState güncelleniyor
+                let accToken: string | null = null;
+                let refToken: string | null = null;
+                let userId: number | null = null;
+                try {
+                    // Token secure store'dan alınıyor
+                    accToken = await SecureStore.getItemAsync(ACC_TOKEN_KEY);
+                    refToken = await SecureStore.getItemAsync(REF_TOKEN_KEY);
+                    let usid = await SecureStore.getItemAsync(USER_ID)
+                    if (usid)
+                        userId = parseInt(usid!);
 
-        SecureStore.getItemAsync('score')
-            .then((score: string | null) => {
-                if (score)
-                    setScore(parseInt(score))
-                else
-                    console.log('Score not found in secureStore: ');
-            })
-            .catch((error) => {
-                console.log('Error ', error);
-            });
-
+                } catch (e) {
+                    console.error(e);
+                }
+                setAuthState({
+                    id: userId ? userId : null,
+                    authenticated: !!accToken,
+                });
+            } catch (error) {
+                console.error("Failed to initialize Google Sign-in:", error);
+            }
+        };
+        // Uygulama başladığında token kontrolü yapılıyor
+        bootstrapAsync();
     }, []);
 
-    const setScoreForSecureStore = async (newScore: Number) => {
-        await SecureStore.setItemAsync('score', newScore.toString())
-    }
-    const increaseTheScore = async (value: number) => {
+    const onGoogleLogin = async () => {
         try {
-            let result = score + value;
-            setScore(result);
-            await setScoreForSecureStore(result)
-        }
-        catch (e) {
-            console.log(e);
-        }
-    }
-
-
-    const onGoogleLogin = async (idToken: string | null) => {
-        try {
-
-            const result: any = await axios.post(`${API_URL}/Auth/google-login`, {
-                idToken: idToken, // Kullanıcının gerçek adı veya e-posta adresi buraya
-            });
-            console.log("result:", result);
-
+            await GoogleSignin.hasPlayServices();
+            let response = await GoogleSignin.signIn();
+            if (!response)
+                throw Error("google sign in hata");
+            const res: TokenResponse = await loginWithGoogle(response.idToken!);
+            if (!res)
+                throw Error("login with google hata");
+            let token: Token = res.token;
             setAuthState({
-                accessToken: result.data.token.accessToken,
-                refreshToken: result.data.token.refreshToken,
-                authenticated: true
+                id: res.id,
+                authenticated: true,
             });
-
-            axios.defaults.headers.common['Authorization'] = `Bearer ${result.data.token.accessToken}`
-            await SecureStore.setItemAsync(TOKEN_KEY, result.data.token.accessToken)
-
-            return result;
+            await SecureStore.setItemAsync(ACC_TOKEN_KEY, token.accessToken);
+            await SecureStore.setItemAsync(REF_TOKEN_KEY, token.refreshToken);
+            await SecureStore.setItemAsync(USER_ID, res.id.toString());
+            // BURADA daha sonra htttp interceptor misali araya girip eger unauthorization hatası alırsak refresh token ile tekrar istek atıcaz
         } catch (e) {
             console.log(e);
         }
     };
-
-
     const onLogout = async () => {
-        // Kullanıcı çıkış işlemleri...
-        console.log("gule gule");
-        await SecureStore.deleteItemAsync(TOKEN_KEY);
+        await logout();
         setAuthState({
-            accessToken: null,
-            refreshToken: null,
-            authenticated: false,
+            id: null,
+            authenticated: false
         });
-
-
-        //google ile girdiyse -
-        // const isSignedIn = await GoogleSignin.isSignedIn();
-        // if (isSignedIn) {
-        //   GoogleSignin.revokeAccess();
-        //   GoogleSignin.signOut();
-        // }
-        console.log("gule 2gule");
+        const isSignedIn = await GoogleSignin.isSignedIn();
+        if (isSignedIn) {
+            GoogleSignin.revokeAccess();
+            GoogleSignin.signOut();
+        }
     };
 
     return (
         <AuthContext.Provider
-            value={{ authState, onLogout, onGoogleLogin, score, increaseTheScore }}
+            value={{ authState, onLogout, onGoogleLogin }}
         >
             {children}
         </AuthContext.Provider>

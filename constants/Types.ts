@@ -1,10 +1,11 @@
 // types.ts
 
 export type TokenResponse = {
-    Token:Token 
+    token:Token ;
+    id:number;
   };
  export type Token = {
-  AccessToken: string;
-  RefreshToken: string;
-  Expiration: Date;
+  accessToken: string;
+  refreshToken: string;
+  expiration: Date;
  }  
