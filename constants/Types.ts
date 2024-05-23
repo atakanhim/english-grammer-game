@@ -9,3 +9,11 @@ export type TokenResponse = {
   refreshToken: string;
   expiration: Date;
  }  
+ export interface GetUserWithIdResponse {
+     Id:number;
+     Email:string;
+     UserName:string;
+     GivenName:string;
+     FamilyName:string;
+     Photo:string;
+ }

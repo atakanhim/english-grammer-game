@@ -18,6 +18,7 @@ export default {
       "googleServicesFile": process.env.GOOGLE_SERVICES_INFOPLIST
     },
     "android": {
+      "permissions": ["android.permission.SCHEDULE_EXACT_ALARM"],
       "package": "com.hm.grammergame",
       "googleServicesFile": process.env.GOOGLE_SERVICES_JSON,
       "adaptiveIcon": {
@@ -33,6 +34,12 @@ export default {
     "plugins": [
       "expo-router",
       "@react-native-google-signin/google-signin",
+      "expo-localization",
+      [ "expo-notifications",
+      {
+        "color": "#ffffff",
+        "mode": "development"
+      }]
       
     ],
     "experiments": {

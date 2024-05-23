@@ -4,7 +4,7 @@ import * as SecureStore from 'expo-secure-store';
 const ACC_TOKEN_KEY = process.env.EXPO_PUBLIC_ACCESS_TOKEN_KEY ?? " ";
 const REF_TOKEN_KEY = process.env.EXPO_PUBLIC_REFRESH_TOKEN_KEY ?? " ";
 const USER_ID = process.env.EXPO_PUBLIC_USER_ID ?? "";
-const API_URL = process.env.EXPO_PUBLIC_API_URL ?? "https://0805-31-223-56-72.ngrok-free.app";
+const API_URL ="https://3c21-31-223-56-72.ngrok-free.app";
 
 const getAccessToken = async () => {
     return await SecureStore.getItemAsync(ACC_TOKEN_KEY);
@@ -88,6 +88,13 @@ apiClient.interceptors.response.use((response) => {
     return Promise.reject(error);
 });
 
+export const logout = async () => {
+    await SecureStore.deleteItemAsync(ACC_TOKEN_KEY);
+    await SecureStore.deleteItemAsync(REF_TOKEN_KEY);
+    await SecureStore.deleteItemAsync(USER_ID);
+};
+
+// auth controller
 export const loginWithGoogle = async (idToken: string) => {
     const response = await apiClient.post('/Auth/google-login', { idToken });
     return response.data;
@@ -97,10 +104,16 @@ export const refreshToken = async (refreshToken: string) => {
     return response.data;
 };
 
-export const logout = async () => {
-    await SecureStore.deleteItemAsync(ACC_TOKEN_KEY);
-    await SecureStore.deleteItemAsync(REF_TOKEN_KEY);
-    await SecureStore.deleteItemAsync(USER_ID);
+// user controller
+
+export const getUserWithId = async (id: number) => {
+    console.log("burda");
+    try {
+        const response = await apiClient.get('/Users/GetUserWithId?UserId=' + id);
+        return response.data;
+    } catch (error) {       
+        console.error(error);
+    }
 };
 
 export default apiClient;

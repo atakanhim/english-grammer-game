@@ -2,36 +2,29 @@ import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 import { useRouter } from "expo-router";
-import { TokenResponse, Token } from "@/constants/Types";
+import { TokenResponse, Token, GetUserWithIdResponse } from "@/constants/Types";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import { loginWithGoogle, logout } from "@/services/apiService";
+import { getUserWithId, loginWithGoogle, logout } from "@/services/apiService";
+import { MMKV, useMMKVBoolean, useMMKVNumber, useMMKVString } from 'react-native-mmkv'
+import { clearStorage, saveCurrentUser, storage, updateUser } from "@/storage/storage";
 
 const ACC_TOKEN_KEY = process.env.EXPO_PUBLIC_ACCESS_TOKEN_KEY ?? " ";
 const REF_TOKEN_KEY = process.env.EXPO_PUBLIC_REFRESH_TOKEN_KEY ?? " ";
-const USER_ID = process.env.EXPO_PUBLIC_USER_ID ?? " ";
-
-const AuthContext = createContext<Partial<AuthProps>>({});
+const AuthContext = createContext<Partial<AuthProps>>({}); interface AuthState {
+    authenticated: boolean | null;
+}
 interface AuthProps {
-    authState: {
-        id: number | null,
-        authenticated: boolean | null;
-    };
+    authState: AuthState;
     onGoogleLogin?: () => Promise<any>;
     onLogout?: () => Promise<any>;
 }
-
 // AuthProvider bileşeni ile context için bir value sağlıyoruz ve çocuk bileşenleri sarmalıyoruz
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     children,
 }) => {
-    const [authState, setAuthState] = useState<{
-        authenticated: boolean | null;
-        id: number | null;
-    }>({
-        id: null,
+    const [authState, setAuthState] = useState<AuthState>({
         authenticated: null
     });
-
     useEffect(() => {
         const bootstrapAsync = async () => {
             try {
@@ -39,59 +32,47 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
                     webClientId:
                         "413146979081-5hkrg1lhmta52o39m09d2u93cia0llna.apps.googleusercontent.com",
                 });
-                // AuthState güncelleniyor
-                let accToken: string | null = null;
-                let refToken: string | null = null;
-                let userId: number | null = null;
-                try {
-                    // Token secure store'dan alınıyor
-                    accToken = await SecureStore.getItemAsync(ACC_TOKEN_KEY);
-                    refToken = await SecureStore.getItemAsync(REF_TOKEN_KEY);
-                    let usid = await SecureStore.getItemAsync(USER_ID)
-                    if (usid)
-                        userId = parseInt(usid!);
+                let accToken = await SecureStore.getItemAsync(ACC_TOKEN_KEY);
+                // burda kontrol etmem lazım aslında token geçerliliğini ve sunucu şuan ayakta mı erişilebiliyor mu 
 
-                } catch (e) {
-                    console.error(e);
-                }
+                // bu arada zaten token var ise yerer depoloma alanına bilgi göndermemize veya kontrol etmemize gerek yok cunku o da vardır .
                 setAuthState({
-                    id: userId ? userId : null,
                     authenticated: !!accToken,
                 });
             } catch (error) {
                 console.error("Failed to initialize Google Sign-in:", error);
             }
         };
-        // Uygulama başladığında token kontrolü yapılıyor
         bootstrapAsync();
     }, []);
 
     const onGoogleLogin = async () => {
+        let login = false;
         try {
             await GoogleSignin.hasPlayServices();
             let response = await GoogleSignin.signIn();
-            if (!response)
-                throw Error("google sign in hata");
             const res: TokenResponse = await loginWithGoogle(response.idToken!);
-            if (!res)
-                throw Error("login with google hata");
-            let token: Token = res.token;
-            setAuthState({
-                id: res.id,
-                authenticated: true,
-            });
-            await SecureStore.setItemAsync(ACC_TOKEN_KEY, token.accessToken);
-            await SecureStore.setItemAsync(REF_TOKEN_KEY, token.refreshToken);
-            await SecureStore.setItemAsync(USER_ID, res.id.toString());
-            // BURADA daha sonra htttp interceptor misali araya girip eger unauthorization hatası alırsak refresh token ile tekrar istek atıcaz
+            login = true;
+            await SecureStore.setItemAsync(ACC_TOKEN_KEY, res.token.accessToken);
+            await SecureStore.setItemAsync(REF_TOKEN_KEY, res.token.refreshToken);
+            let result: GetUserWithIdResponse = await getUserWithId(res.id);
+            console.log("authlog res : ", result);
+            saveCurrentUser(result as any); // locale attım
+
         } catch (e) {
             console.log(e);
+        }
+        finally {
+
+            setAuthState({
+                authenticated: true,
+            });
         }
     };
     const onLogout = async () => {
         await logout();
+        clearStorage();
         setAuthState({
-            id: null,
             authenticated: false
         });
         const isSignedIn = await GoogleSignin.isSignedIn();
