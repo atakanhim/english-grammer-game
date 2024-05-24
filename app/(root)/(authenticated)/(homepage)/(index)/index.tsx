@@ -18,6 +18,7 @@ import index from "@/app/(root)/(unauthenticated)";
 import { useAuth } from "@/contexts/AuthProvider";
 import TopSideRender from "@/components/HomePageComponents/TopSideRender";
 import BottomSideRender from "@/components/HomePageComponents/BottomSideRender";
+import QuestionLevelRender from "@/components/HomePageComponents/QuestionLevelRender";
 function createRandomData(): SentenceData {
     let data: SentenceData[] = d2;
     let selectedData = data[Math.floor(Math.random() * data.length)];
@@ -218,6 +219,9 @@ export default function TabOneScreen() {
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 }
             >
+                <View style={{ width: '100%', padding: 15 }}>
+                    <QuestionLevelRender />
+                </View>
                 <View style={{ width: '100%' }}>
                     {/* bunu yazmamızın amacı style olarak ortaladıgımız için ben direk full kaplasın istiyorum kalan yerleri */}
                     <TopSideRender randomData={randomData} score={1111} />
@@ -229,15 +233,10 @@ export default function TabOneScreen() {
                     {renderGetAnswerData()}
                     {renderSetAnswerData()}
                 </View>
-
                 <View style={{ width: '100%' }}>
                     {/* bunu yazmamızın amacı style olarak ortaladıgımız için ben direk full kaplasın istiyorum kalan yerleri */}
                     <BottomSideRender refresh={refresh} handleButtonPress={handleButtonPress} />
                 </View>
-
-
-
-
                 <Modal
                     animationType="slide"
                     transparent={true}

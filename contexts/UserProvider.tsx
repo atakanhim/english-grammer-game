@@ -22,7 +22,8 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
         GivenName: "",
         FamilyName: "",
         Photo: "",
-        TotalScore: 0
+        TotalScore: 0,
+        Rank: null
     });
     useEffect(() => {
         const bootstrapAsync = async () => {

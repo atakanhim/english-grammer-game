@@ -1,4 +1,10 @@
 {
-    "welcome": "Hoşgeldiniz",
-    "hello": "Merhaba"
+    "shortLanguage": "Tr",
+    "email": "E-Mail",
+    "fullname": "Kullanıcı Adı",
+    "totalscore": "Toplam Puan",
+    "createNewSentences": "Yeni Cümle Oluştur ( Ai İle )",
+    "sentences": "Cümleler",
+    "challenge": "Meydan Okuma",
+    "practice": "Praktik"
 }

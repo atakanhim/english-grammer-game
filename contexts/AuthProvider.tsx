@@ -6,7 +6,7 @@ import { TokenResponse, Token, GetUserWithIdResponse } from "@/constants/Types";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { getUserWithId, loginWithGoogle, logout } from "@/services/apiService";
 import { MMKV, useMMKVBoolean, useMMKVNumber, useMMKVString } from 'react-native-mmkv'
-import { clearStorage, saveCurrentUser, storage, updateUser } from "@/storage/storage";
+import { clearStorage, getUserId, saveCurrentUser, storage, updateUser } from "@/storage/storage";
 
 const ACC_TOKEN_KEY = process.env.EXPO_PUBLIC_ACCESS_TOKEN_KEY ?? " ";
 const REF_TOKEN_KEY = process.env.EXPO_PUBLIC_REFRESH_TOKEN_KEY ?? " ";
@@ -35,7 +35,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
                 let accToken = await SecureStore.getItemAsync(ACC_TOKEN_KEY);
                 // burda kontrol etmem lazım aslında token geçerliliğini ve sunucu şuan ayakta mı erişilebiliyor mu 
 
-                // bu arada zaten token var ise yerer depoloma alanına bilgi göndermemize veya kontrol etmemize gerek yok cunku o da vardır .
+                let result: GetUserWithIdResponse = await getUserWithId(getUserId());
+                saveCurrentUser(result as any); // locale attım
                 setAuthState({
                     authenticated: !!accToken,
                 });
@@ -56,17 +57,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
             await SecureStore.setItemAsync(ACC_TOKEN_KEY, res.token.accessToken);
             await SecureStore.setItemAsync(REF_TOKEN_KEY, res.token.refreshToken);
             let result: GetUserWithIdResponse = await getUserWithId(res.id);
-            console.log("authlog res : ", result);
             saveCurrentUser(result as any); // locale attım
 
         } catch (e) {
             console.log(e);
         }
         finally {
-
-            setAuthState({
-                authenticated: true,
-            });
+            if (login)
+                setAuthState({
+                    authenticated: true,
+                });
         }
     };
     const onLogout = async () => {
