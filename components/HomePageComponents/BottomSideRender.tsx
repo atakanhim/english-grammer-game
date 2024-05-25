@@ -1,46 +1,20 @@
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import React from 'react';
 
 const BottomSideRender = ({ refresh, handleButtonPress }: any) => {
     return (
-        <View style={styles.buttonsContainer}>
-            <Pressable style={[styles.customButton, styles.refreshButton]} onPress={refresh}>
-                <Text style={styles.buttonText}>Yenile</Text>
-            </Pressable>
-            <Pressable style={[styles.customButton, styles.checkButton]} onPress={handleButtonPress}>
-                <Text style={styles.buttonText}>Kontrol ET</Text>
-            </Pressable>
+        <View className="flex flex-col items-center justify-center p-4">
+            <View className="flex flex-row justify-between w-full px-4 mt-4">
+                <Pressable className="bg-blue-500 py-2 px-4 rounded-md" onPress={refresh}>
+                    <Text className="text-white text-center">Yenile</Text>
+                </Pressable>
+                <Pressable className="bg-green-500 py-2 px-4 rounded-md" onPress={handleButtonPress}>
+                    <Text className="text-white text-center">Kontrol ET</Text>
+                </Pressable>
+            </View>
         </View>
     );
 };
 
 export default BottomSideRender;
 
-const styles = StyleSheet.create({
-    buttonsContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        paddingVertical: 15,
-        paddingHorizontal: 10,
-    },
-    customButton: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        paddingHorizontal: 35,
-        paddingVertical: 10,
-        borderRadius: 15,
-        alignItems: 'center',
-    },
-    refreshButton: {
-        backgroundColor: 'lightblue',
-    },
-    checkButton: {
-        backgroundColor: 'lightgreen',
-    },
-    buttonText: {
-        fontSize: 16,
-        color: '#000',
-        fontWeight: 'bold',
-    },
-});

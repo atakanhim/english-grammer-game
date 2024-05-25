@@ -19,37 +19,63 @@ import { useAuth } from "@/contexts/AuthProvider";
 import TopSideRender from "@/components/HomePageComponents/TopSideRender";
 import BottomSideRender from "@/components/HomePageComponents/BottomSideRender";
 import QuestionLevelRender from "@/components/HomePageComponents/QuestionLevelRender";
-function createRandomData(): SentenceData {
-    let data: SentenceData[] = d2;
-    let selectedData = data[Math.floor(Math.random() * data.length)];
-    return selectedData;
-}
+import { Choosens } from "@/constants/Enums/Choosen";
+
 export default function TabOneScreen() {
 
     const [randomData, setRandomData] = useState<SentenceData>();
     const [shuffledResults, setShuffledResults] = useState<any[]>([]);
     const [answerData, setAnswerData] = useState<any[]>([]);
     const [refreshing, setRefreshing] = useState(false);
-
-
-
     const [modalVisible, setModalVisible] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
 
 
+    // questionrender gonderilecek
+    const [choosenLevel, setChoosenLevel] = useState<{
+        range: { start: null, end: null },
+        single: Choosens | undefined,
+        selected: 'range' | 'single'
+    }>({
+        range: { start: null, end: null },
+        single: Choosens.Random,
+        selected: 'single'
+    });
+    const [showChoosen, setShowChoosen] = useState(false); // showChoosen false onaylanmıs demek render edilebilir
     useEffect(() => {
         refresh();
-    }, []);
+        if (choosenLevel.selected == "range")
+            console.log("Secilen Deger ", choosenLevel.range);
+        if (choosenLevel.selected == "single")
+            console.log("Secilen Deger ", choosenLevel.single);
+    }, [showChoosen]);
 
+    const filterData = (data: SentenceData[]): SentenceData[] => {
+        if (choosenLevel.selected === 'single' && choosenLevel.single !== Choosens.Random) {
+            return data.filter(item => item.level === choosenLevel.single);
+
+        } else if (choosenLevel.selected === 'range' && choosenLevel.range) {
+            const levels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+            const startIndex = levels.indexOf(choosenLevel.range.start as any);
+            const endIndex = levels.indexOf(choosenLevel.range.end as any);
+            return data.filter(item => {
+                const levelIndex = levels.indexOf(item.level as any);
+                return levelIndex >= startIndex && levelIndex <= endIndex;
+            });
+        }
+        return data; // random (all data)
+    };
+    function createRandomData(): SentenceData {
+        let filteredData = filterData(d2);
+        let selectedData = filteredData[Math.floor(Math.random() * filteredData.length)];
+        return selectedData;
+    }
     function refresh() {
         let selectedData = createRandomData();
         setRandomData(selectedData);
         setAnswerData([]);
         setShuffledResults(shuffle([...selectedData.wordEngAryResult]));
     }
-
-
-
     const onRefresh = () => {
         setRefreshing(true);
         refresh();
@@ -220,7 +246,7 @@ export default function TabOneScreen() {
                 }
             >
                 <View style={{ width: '100%', padding: 15 }}>
-                    <QuestionLevelRender />
+                    <QuestionLevelRender showChoosen={showChoosen} setShowChoosen={setShowChoosen} choosenLevel={choosenLevel} setChoosenLevel={setChoosenLevel} />
                 </View>
                 <View style={{ width: '100%' }}>
                     {/* bunu yazmamızın amacı style olarak ortaladıgımız için ben direk full kaplasın istiyorum kalan yerleri */}
