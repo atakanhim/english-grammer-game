@@ -20,12 +20,14 @@ import TopSideRender from "@/components/HomePageComponents/TopSideRender";
 import BottomSideRender from "@/components/HomePageComponents/BottomSideRender";
 import QuestionLevelRender from "@/components/HomePageComponents/QuestionLevelRender";
 import { Choosens } from "@/constants/Enums/Choosen";
+import MainGameContainer from "@/components/HomePageComponents/GameRenderComponents/MainGameContainer";
 
 export default function TabOneScreen() {
 
     const [randomData, setRandomData] = useState<SentenceData>();
     const [shuffledResults, setShuffledResults] = useState<any[]>([]);
     const [answerData, setAnswerData] = useState<any[]>([]);
+
     const [refreshing, setRefreshing] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
@@ -83,7 +85,6 @@ export default function TabOneScreen() {
     };
     const handleButtonPress = async () => {
         let control = true;
-        // control edicek 
         if (!(randomData || answerData))
             return
         for (let i = 0; i < randomData!.wordEngAryResult.length; i++) {
@@ -249,20 +250,19 @@ export default function TabOneScreen() {
                     <QuestionLevelRender showChoosen={showChoosen} setShowChoosen={setShowChoosen} choosenLevel={choosenLevel} setChoosenLevel={setChoosenLevel} />
                 </View>
                 <View style={{ width: '100%' }}>
-                    {/* bunu yazmamızın amacı style olarak ortaladıgımız için ben direk full kaplasın istiyorum kalan yerleri */}
-                    <TopSideRender randomData={randomData} score={1111} />
+                    <TopSideRender randomData={randomData} />
                 </View>
-                <View style={styles.container}>
-                    <View style={styles.titleContainer}>
-                        <Text style={styles.title}>{randomData?.wordEng}</Text>
+
+                <View className="flex-1 w-full">
+                    <View className="border bg-red-600">
+                        <BottomSideRender refresh={refresh} handleButtonPress={handleButtonPress} />
+
                     </View>
-                    {renderGetAnswerData()}
-                    {renderSetAnswerData()}
+
+                    <MainGameContainer randomData={randomData} shuffledResults={shuffledResults} answerData={answerData} setAnswerData={setAnswerData} setShuffledResults={setShuffledResults} ></MainGameContainer>
+
                 </View>
-                <View style={{ width: '100%' }}>
-                    {/* bunu yazmamızın amacı style olarak ortaladıgımız için ben direk full kaplasın istiyorum kalan yerleri */}
-                    <BottomSideRender refresh={refresh} handleButtonPress={handleButtonPress} />
-                </View>
+
                 <Modal
                     animationType="slide"
                     transparent={true}
@@ -285,7 +285,7 @@ export default function TabOneScreen() {
                     </View>
                 </Modal>
             </ScrollView>
-        </SafeAreaView>
+        </SafeAreaView >
     );
 }
 function shuffle(array: any[]) {
@@ -337,9 +337,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
     },
 
-    container: {
-        flex: 1,
-    },
     scrollView: {
         alignItems: 'center',
         justifyContent: 'center',

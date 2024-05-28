@@ -1,53 +1,19 @@
+import { loadCurrentUser } from '@/storage/storage';
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { View, Text } from 'react-native';
+interface TopSideRenderProps {
+    randomData: SentenceData | undefined;
+}
+const TopSideRender: React.FC<TopSideRenderProps> = ({ randomData }) => {
+    const { t } = useTranslation();
 
-const TopSideRender = ({ randomData, score }: any) => {
     return (
-        <View style={styles.topContainer}>
-            <View style={styles.leftContainer}>
-                <Text style={styles.label}>Seviye:</Text>
-                <Text style={styles.value}>{randomData?.level}</Text>
-                <Text style={styles.label}>Zaman:</Text>
-                <Text style={styles.value}>{randomData?.tense}</Text>
-            </View>
-            <View style={styles.rightContainer}>
-                <Text style={styles.label}>Toplam Puanın:</Text>
-                <Text style={styles.value}>{score}</Text>
-                <Text style={styles.label}>Sorunun Puanı:</Text>
-                <Text style={styles.value}>100</Text>
-            </View>
+        <View className="flex-1  flex-row justify-between p-2" >
+            <Text>{t("level")} : <Text className="font-bold">{randomData?.level}</Text> </Text>
+            <Text>{t("tense")} : <Text className='font-bold'>{randomData?.tense}</Text></Text>
         </View>
     );
 };
 
 export default TopSideRender;
-
-const styles = StyleSheet.create({
-    topContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ddd',
-    },
-    leftContainer: {
-        flex: 1,
-        alignItems: 'flex-start',
-    },
-    rightContainer: {
-        flex: 1,
-        alignItems: 'flex-end',
-    },
-    label: {
-        fontSize: 14,
-        color: '#555',
-        fontWeight: 'bold',
-    },
-    value: {
-        fontSize: 16,
-        fontWeight: '900',
-        color: '#000',
-        marginBottom: 5,
-    },
-});

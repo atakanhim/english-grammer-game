@@ -27,24 +27,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     });
     useEffect(() => {
         const bootstrapAsync = async () => {
+            let state = false;
             try {
+
                 GoogleSignin.configure({
                     webClientId:
                         "413146979081-5hkrg1lhmta52o39m09d2u93cia0llna.apps.googleusercontent.com"
                 });
-                let accToken = await SecureStore.getItemAsync(ACC_TOKEN_KEY);
                 // burda kontrol etmem lazım aslında token geçerliliğini ve sunucu şuan ayakta mı erişilebiliyor mu 
-                let result: GetUserWithIdResponse;
-                if (getUserId() > 0) {
-                    result = await getUserWithId(getUserId());
-                    if (result)
-                        saveCurrentUser(result as any); // locale attım
-                }
-                setAuthState({
-                    authenticated: !!accToken,
-                });
+                saveCurrentUser(await getUserWithId(getUserId()) as any | null | undefined); // locale attım
+                await SecureStore.getItemAsync(ACC_TOKEN_KEY);
+                state = true;
             } catch (error) {
-                console.error("Failed to initialize Google Sign-in:", error);
+                state = false;
+            }
+            finally {
+                setAuthState({
+                    authenticated: state,
+                });
             }
         };
         bootstrapAsync();

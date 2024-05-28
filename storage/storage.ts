@@ -38,7 +38,7 @@ export const saveCurrentUser = (user: CurrentUserStorage) => {
 // Kullanıcı bilgisini geri yüklemek için bir fonksiyon
 export const loadCurrentUser = (): CurrentUserStorage | null => {
   const userData = storage.getString(STORAGE_KEYS.CURRENT_USER);
-  if (userData) {
+  if (userData != undefined) {
     return JSON.parse(userData) as CurrentUserStorage;
   }
   return null;
@@ -54,8 +54,8 @@ export const updateUser = (user: Partial<CurrentUserStorage>) => {
 
 // Kullanıcıyı güncelleme ve depolama örneği
 export const getUserId = () => {
-  const currentUser = loadCurrentUser() || defaultCurrentUser;
-  return currentUser.Id;
+    const currentUser = loadCurrentUser() || defaultCurrentUser;
+    return currentUser.Id 
 };
 
 
