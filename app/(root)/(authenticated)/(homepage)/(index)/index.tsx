@@ -13,9 +13,7 @@ import {
 } from "react-native";
 import d2 from "@/constants/ExampleData";
 import { useEffect, useState } from "react";
-import DraggableFlatList from "react-native-draggable-flatlist";
-import index from "@/app/(root)/(unauthenticated)";
-import { useAuth } from "@/contexts/AuthProvider";
+
 import TopSideRender from "@/components/HomePageComponents/TopSideRender";
 import BottomSideRender from "@/components/HomePageComponents/BottomSideRender";
 import QuestionLevelRender from "@/components/HomePageComponents/QuestionLevelRender";
@@ -69,16 +67,17 @@ export default function TabOneScreen() {
         }
         return data; // random (all data)
     };
-    function createRandomData(): SentenceData {
+    async function createRandomData(): Promise<SentenceData> {
         let filteredData = filterData(d2);
-        let selectedData = filteredData[Math.floor(Math.random() * filteredData.length)];
+        let selectedData = await filteredData[Math.floor(Math.random() * filteredData.length)];
         return selectedData;
     }
-    function refresh() {
-        let selectedData = createRandomData();
+    async function refresh() {
+        let selectedData = await createRandomData();
         setRandomData(selectedData);
         setAnswerData([]);
-        setShuffledResults(shuffle([...selectedData.wordEngAryResult]));
+        if (selectedData.wordEngAryResult)
+            setShuffledResults(shuffle([...selectedData.wordEngAryResult]));
         setFalseIndexs([]);
 
     }
@@ -93,7 +92,7 @@ export default function TabOneScreen() {
         if (!(randomData || answerData))
             throw "bu hata";
 
-        if (randomData)
+        if (randomData && randomData.wordEngAryResult.length > 0)
             for (let i = 0; i < randomData.wordEngAryResult.length; i++) {
 
                 let realData = randomData?.wordEngAryResult[i];
@@ -151,7 +150,7 @@ export default function TabOneScreen() {
                 <View className="flex-1 w-full  border border-purple-300 rounded-[100px]" >
                     <View className="px-10">
                         <TopSideRender randomData={randomData} />
-                        <BottomSideRender refresh={refresh} handleButtonPress={handleButtonPress} />
+                        <BottomSideRender helpState={helpState} setHelpState={setHelpState} refresh={refresh} handleButtonPress={handleButtonPress} />
                     </View>
                     <MainGameContainer helpState={helpState} falseIndexs={falseIndexs} setFalseIndexs={setFalseIndexs} randomData={randomData} shuffledResults={shuffledResults} answerData={answerData} setAnswerData={setAnswerData} setShuffledResults={setShuffledResults} ></MainGameContainer>
                 </View>
