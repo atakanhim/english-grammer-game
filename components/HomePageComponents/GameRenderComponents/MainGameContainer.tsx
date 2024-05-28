@@ -5,13 +5,16 @@ import { ScrollView } from 'react-native-gesture-handler';
 interface MainGameContainerProps {
     randomData: SentenceData | undefined;
     shuffledResults: any[];
+
+    answerData: any[];
+    falseIndexs: any[];
     setAnswerData: Dispatch<SetStateAction<any[]>>;
     setShuffledResults: Dispatch<SetStateAction<any[]>>;
-    answerData: any[];
-}
-const MainGameContainer: React.FC<MainGameContainerProps> = ({ randomData, shuffledResults, answerData, setAnswerData, setShuffledResults }) => {
+    setFalseIndexs: Dispatch<SetStateAction<any[]>>;
 
-    const [helpState, setHelpState] = useState<boolean>(false);
+}
+const MainGameContainer: React.FC<MainGameContainerProps> = ({ randomData, shuffledResults, answerData, setAnswerData, setShuffledResults, falseIndexs, setFalseIndexs }) => {
+
 
     const [selectedShuufleIndex, setSelectedShuufleIndex] = useState<number | null>(null);
     const [selectedAnswerIndex, setSelectedAnswerIndex] = useState<number | null>(null);
@@ -36,15 +39,16 @@ const MainGameContainer: React.FC<MainGameContainerProps> = ({ randomData, shuff
             return newShuffledResults;
         })
     }
+
     useEffect(() => {
         if (!answerData || answerData.length === 0) {
             setAnswerData(new Array(randomData?.wordEngAry.length).fill(''));
         }
     }, [randomData, answerData, setAnswerData]);
+
+
     useEffect(() => {
         if (selectedShuufleIndex != null && selectedAnswerIndex != null && selectedAnswerIndex >= 0 && selectedAnswerIndex >= 0) {
-            console.log("shuffle : ", selectedShuufleIndex)
-            console.log("answer : ", selectedAnswerIndex)
             if (answerData[selectedAnswerIndex] != "") {
                 let data = answerData[selectedAnswerIndex];
                 removeItemFromAnswerData(selectedAnswerIndex);
@@ -75,12 +79,6 @@ const MainGameContainer: React.FC<MainGameContainerProps> = ({ randomData, shuff
     const renderAnswerData = () => {
         return (
             <>
-                <View className='mb-5 flex flex-row justify-between p-4'>
-                    <Text> Yardımı ac kapat </Text>
-                    <Pressable onPress={() => setHelpState(!helpState)} className='px-5 py-2 border-cyan-400 border'>
-                        <Text>  AÇ / KAPA </Text>
-                    </Pressable>
-                </View>
                 <View className='flex flex-row flex-wrap  py-6  items-center justify-center'>
 
                     {randomData?.wordEngAry?.map((word, index) => (
