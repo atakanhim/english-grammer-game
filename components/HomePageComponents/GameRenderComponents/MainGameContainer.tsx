@@ -11,9 +11,9 @@ interface MainGameContainerProps {
     setAnswerData: Dispatch<SetStateAction<any[]>>;
     setShuffledResults: Dispatch<SetStateAction<any[]>>;
     setFalseIndexs: Dispatch<SetStateAction<any[]>>;
-
+    helpState: Boolean;
 }
-const MainGameContainer: React.FC<MainGameContainerProps> = ({ randomData, shuffledResults, answerData, setAnswerData, setShuffledResults, falseIndexs, setFalseIndexs }) => {
+const MainGameContainer: React.FC<MainGameContainerProps> = ({ randomData, shuffledResults, answerData, setAnswerData, setShuffledResults, falseIndexs, setFalseIndexs, helpState }) => {
 
 
     const [selectedShuufleIndex, setSelectedShuufleIndex] = useState<number | null>(null);
@@ -80,13 +80,13 @@ const MainGameContainer: React.FC<MainGameContainerProps> = ({ randomData, shuff
         return (
             <>
                 <View className='flex flex-row flex-wrap  py-6  items-center justify-center'>
-
                     {randomData?.wordEngAry?.map((word, index) => (
                         <Pressable key={index} className='ml-5' >
                             <Text className="p-1 font-light" >{word}</Text>
                             <Text
-                                className={`p-1 border-b border-l rounded-md min-w-[70px] 
-                      ${answerData[index] !== "" ? "border-green-700"
+                                className={`${helpState ? (falseIndexs.includes(index) ? "text-red-600 bg-red-100" : "text-green-600 bg-green-100") : "text-blue-600 bg-blue-100"}
+                                p-1 border-b border-l rounded-md min-w-[70px]
+                            ${answerData[index] !== "" ? "border-green-700"
                                         : selectedShuufleIndex == null ? "border-blue-300"
                                             : "border-blue-600 scale-125"}`}
                                 onPress={() => selectedShuufleIndex == null ? removeItemFromAnswerData(index) : setSelectedAnswerIndex(index)}
@@ -96,7 +96,7 @@ const MainGameContainer: React.FC<MainGameContainerProps> = ({ randomData, shuff
 
                         </Pressable>
                     ))}
-                </View>
+                </View >
             </>
         )
 

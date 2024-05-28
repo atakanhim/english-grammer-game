@@ -107,6 +107,7 @@ export default function TabOneScreen() {
         let control = controlDataResults();
         if (control) {
             setModalMessage('Congratulations! You have completed the test. Please refresh to start a new test.');
+            refresh();
             setModalVisible(true);
         } else {
             setModalMessage('Please try again.');
@@ -278,7 +279,7 @@ export default function TabOneScreen() {
                 <View className="flex-1 w-full p-2" >
 
                     <BottomSideRender refresh={refresh} handleButtonPress={handleButtonPress} />
-                    <MainGameContainer falseIndexs={falseIndexs} setFalseIndexs={setFalseIndexs} randomData={randomData} shuffledResults={shuffledResults} answerData={answerData} setAnswerData={setAnswerData} setShuffledResults={setShuffledResults} ></MainGameContainer>
+                    <MainGameContainer helpState={helpState} falseIndexs={falseIndexs} setFalseIndexs={setFalseIndexs} randomData={randomData} shuffledResults={shuffledResults} answerData={answerData} setAnswerData={setAnswerData} setShuffledResults={setShuffledResults} ></MainGameContainer>
 
                 </View>
 
@@ -296,9 +297,9 @@ export default function TabOneScreen() {
                                 style={[styles.button, styles.buttonClose]}
                                 onPress={() => {
                                     setModalVisible(!modalVisible);
-                                    refresh();
+
                                 }}>
-                                <Text style={styles.textStyle}>Yeni Soru Gec</Text>
+                                <Text style={styles.textStyle}>{modalMessage}</Text>
                             </Pressable>
                         </View>
                     </View>
