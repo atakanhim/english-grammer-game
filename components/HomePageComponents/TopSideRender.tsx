@@ -9,7 +9,7 @@ const TopSideRender: React.FC<TopSideRenderProps> = ({ randomData }) => {
     const { t } = useTranslation();
 
     return (
-        <View className="flex-1  flex-row justify-between p-1 mt-5" >
+        <View className="flex flex-row justify-between p-1 mt-5 " >
             <Text>{t("level")} : <Text className="font-bold">{randomData?.level}</Text> </Text>
             <Text>{t("tense")} : <Text className='font-bold'>{randomData?.tense}</Text></Text>
         </View>

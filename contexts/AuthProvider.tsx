@@ -5,7 +5,6 @@ import { useRouter } from "expo-router";
 import { TokenResponse, Token, GetUserWithIdResponse } from "@/constants/Types";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { getUserWithId, loginWithGoogle, logout } from "@/services/apiService";
-import { MMKV, useMMKVBoolean, useMMKVNumber, useMMKVString } from 'react-native-mmkv'
 import { clearStorage, getUserId, saveCurrentUser, storage, updateUser } from "@/storage/storage";
 
 const ACC_TOKEN_KEY = process.env.EXPO_PUBLIC_ACCESS_TOKEN_KEY ?? " ";

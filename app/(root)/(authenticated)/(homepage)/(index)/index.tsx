@@ -128,10 +128,6 @@ export default function TabOneScreen() {
     useEffect(() => {
         if (showChoosen == false)
             refresh();
-        if (choosenLevel.selected == "range")
-            console.log("Secilen Deger ", choosenLevel.range);
-        if (choosenLevel.selected == "single")
-            console.log("Secilen Deger ", choosenLevel.single);
     }, [showChoosen]);
 
     useEffect(() => {
@@ -149,21 +145,16 @@ export default function TabOneScreen() {
             >
                 <View style={{ width: '100%', padding: 8 }}>
                     <QuestionLevelRender showChoosen={showChoosen} setShowChoosen={setShowChoosen} choosenLevel={choosenLevel} setChoosenLevel={setChoosenLevel} />
-                    <TopSideRender randomData={randomData} />
                 </View>
-                <View className='w-full mb-5 flex flex-row justify-between p-4'>
-                    <Text> Yardımı ac kapat </Text>
-                    <Pressable onPress={() => setHelpState(!helpState)} className={`${helpState ? ' bg-blue-400 ' : ' bg-slate-500'} border p-2 rounded-md`}>
-                        <Text>  {helpState ? "KAPA" : "AÇ"}  </Text>
-                    </Pressable>
-                </View>
-                <View className="flex-1 w-full p-2" >
 
-                    <BottomSideRender refresh={refresh} handleButtonPress={handleButtonPress} />
+
+                <View className="flex-1 w-full  border border-purple-300 rounded-[100px]" >
+                    <View className="px-10">
+                        <TopSideRender randomData={randomData} />
+                        <BottomSideRender refresh={refresh} handleButtonPress={handleButtonPress} />
+                    </View>
                     <MainGameContainer helpState={helpState} falseIndexs={falseIndexs} setFalseIndexs={setFalseIndexs} randomData={randomData} shuffledResults={shuffledResults} answerData={answerData} setAnswerData={setAnswerData} setShuffledResults={setShuffledResults} ></MainGameContainer>
-
                 </View>
-
                 <Modal
                     animationType="slide"
                     transparent={true}
