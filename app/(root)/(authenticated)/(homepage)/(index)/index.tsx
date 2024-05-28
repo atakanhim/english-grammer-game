@@ -45,7 +45,8 @@ export default function TabOneScreen() {
     });
     const [showChoosen, setShowChoosen] = useState(false); // showChoosen false onaylanmıs demek render edilebilir
     useEffect(() => {
-        refresh();
+        if (showChoosen == false)
+            refresh();
         if (choosenLevel.selected == "range")
             console.log("Secilen Deger ", choosenLevel.range);
         if (choosenLevel.selected == "single")
@@ -246,19 +247,14 @@ export default function TabOneScreen() {
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 }
             >
-                <View style={{ width: '100%', padding: 15 }}>
+                <View style={{ width: '100%', padding: 8 }}>
                     <QuestionLevelRender showChoosen={showChoosen} setShowChoosen={setShowChoosen} choosenLevel={choosenLevel} setChoosenLevel={setChoosenLevel} />
-                </View>
-                <View style={{ width: '100%' }}>
                     <TopSideRender randomData={randomData} />
                 </View>
 
-                <View className="flex-1 w-full">
-                    <View className="border bg-red-600">
-                        <BottomSideRender refresh={refresh} handleButtonPress={handleButtonPress} />
+                <View className="flex-1 w-full p-2" >
 
-                    </View>
-
+                    <BottomSideRender refresh={refresh} handleButtonPress={handleButtonPress} />
                     <MainGameContainer randomData={randomData} shuffledResults={shuffledResults} answerData={answerData} setAnswerData={setAnswerData} setShuffledResults={setShuffledResults} ></MainGameContainer>
 
                 </View>

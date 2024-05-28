@@ -11,6 +11,8 @@ interface MainGameContainerProps {
 }
 const MainGameContainer: React.FC<MainGameContainerProps> = ({ randomData, shuffledResults, answerData, setAnswerData, setShuffledResults }) => {
 
+    const [helpState, setHelpState] = useState<boolean>(false);
+
     const [selectedShuufleIndex, setSelectedShuufleIndex] = useState<number | null>(null);
     const [selectedAnswerIndex, setSelectedAnswerIndex] = useState<number | null>(null);
 
@@ -70,12 +72,12 @@ const MainGameContainer: React.FC<MainGameContainerProps> = ({ randomData, shuff
 
 
 
-    const renderRandomData = () => {
+    const renderAnswerData = () => {
         return (
             <>
                 <View className='mb-5 flex flex-row justify-between p-4'>
                     <Text> Yardımı ac kapat </Text>
-                    <Pressable className='px-5 py-2 border-cyan-400 border'>
+                    <Pressable onPress={() => setHelpState(!helpState)} className='px-5 py-2 border-cyan-400 border'>
                         <Text>  AÇ / KAPA </Text>
                     </Pressable>
                 </View>
@@ -105,7 +107,7 @@ const MainGameContainer: React.FC<MainGameContainerProps> = ({ randomData, shuff
     return (
         <SafeAreaView>
             <View>
-                {renderRandomData()!}
+                {renderAnswerData()!}
             </View>
             <View className="flex flex-row flex-wrap gap-3 font-extralight justify-center mt-1  ">
                 {

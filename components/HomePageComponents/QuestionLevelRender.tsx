@@ -65,7 +65,6 @@ const QuestionLevelRender: React.FC<QuestionLevelRenderProps> = ({ choosenLevel,
     };
 
     const renderChoosenTypeText = () => {
-
         return <>
             <Text className='mt-3'> {
                 choosenLevel.selected === "single" ?
@@ -76,7 +75,7 @@ const QuestionLevelRender: React.FC<QuestionLevelRenderProps> = ({ choosenLevel,
     }
     return (
         <View style={{ flex: 1 }}>
-            <View className="flex flex-row justify-between p-3" >
+            <View className="flex flex-row justify-between " >
                 {renderChoosenTypeText()}
                 <Pressable style={styles.chooseButton} onPress={performAction}>
                     <Text style={{ color: 'white', textAlign: 'center' }}>{showChoosen ? "Confirm" : "Choose Level"}</Text>
