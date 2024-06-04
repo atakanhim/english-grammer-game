@@ -1,7 +1,7 @@
 export default {
   "expo": {
-    "name": "gramergame",
-    "slug": "gramergame",
+    "name": "gramergameDevelopmentV2",
+    "slug": "gramergameV2",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -10,7 +10,7 @@ export default {
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#000000"
     },
     "ios": {
       "bundleIdentifier": "com.hm.grammergame",
@@ -31,17 +31,17 @@ export default {
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-    "plugins": [
-      "expo-router",
-      "@react-native-google-signin/google-signin",
-      "expo-localization",
-      [ "expo-notifications",
-      {
-        "color": "#ffffff",
-        "mode": "development"
-      }]
-      
-    ],
+      "plugins": [
+        "expo-router",
+        "@react-native-google-signin/google-signin",
+        "expo-localization",
+        [ "expo-notifications",
+        {
+          "color": "#ffffff",
+          "mode": "development"
+        }]
+        
+      ],
     "experiments": {
       "typedRoutes": true
     },
@@ -49,9 +49,6 @@ export default {
       "router": {
         "origin": false
       },
-      "eas": {
-        "projectId": "ac595807-8255-4a33-b5ad-a3e227fb08f5"
-      }
     }
   }
 }

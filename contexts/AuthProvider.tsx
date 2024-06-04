@@ -38,6 +38,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
                 await SecureStore.getItemAsync(ACC_TOKEN_KEY);
                 state = true;
             } catch (error) {
+
                 state = false;
             }
             finally {

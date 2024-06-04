@@ -4,7 +4,7 @@ import * as SecureStore from 'expo-secure-store';
 const ACC_TOKEN_KEY = process.env.EXPO_PUBLIC_ACCESS_TOKEN_KEY ?? " ";
 const REF_TOKEN_KEY = process.env.EXPO_PUBLIC_REFRESH_TOKEN_KEY ?? " ";
 const USER_ID = process.env.EXPO_PUBLIC_USER_ID ?? "";
-const API_URL ="https://cbba-31-223-56-229.ngrok-free.app";
+const API_URL =process.env.EXPO_PUBLIC_API_URL ?? "";
 
 const getAccessToken = async () => {
     return await SecureStore.getItemAsync(ACC_TOKEN_KEY);
@@ -111,7 +111,7 @@ export const getUserWithId = async (id: number) => {
         const response = await apiClient.get('/Users/GetUserWithId?UserId=' + id);
         return response.data;
     } catch (error) {       
-        console.error(error);
+        console.warn("user id bulunamadi");
     }
 };
 

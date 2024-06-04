@@ -21,15 +21,26 @@ const index = () => {
     return (
         <View style={{
             flex: 1,
-            justifyContent: 'center',
+            justifyContent: "flex-end",
             alignItems: 'center',
-        }}>
-            <GoogleSigninButton
-                size={GoogleSigninButton.Size.Standard}
-                color={GoogleSigninButton.Color.Dark}
-                onPress={signIn}
-            />
+            marginBottom: 100
+
+        }}
+        >
+            <Pressable style={{ width: 150, height: 75 }} className='flex justify-center items-center'
+                onPress={signIn}>
+
+                <GoogleSigninButton
+                    style={{ height: "100%", width: '100%' }}
+                    size={GoogleSigninButton.Size.Icon}
+                    color={GoogleSigninButton.Color.Dark}
+
+                />
+
+
+            </Pressable>
         </View>
+
     );
 }
 

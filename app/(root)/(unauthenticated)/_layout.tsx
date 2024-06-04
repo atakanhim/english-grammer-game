@@ -15,44 +15,11 @@ export default function Layout() {
                 name="index"
                 options={{
                     animation: "slide_from_right",
-                    title: 'Giriş yap',
-                    headerRight: () => (
-                        <Link href="(unauthenticated)/register" asChild>
-                            <Pressable>
-                                {({ pressed }) => (
-                                    <FontAwesome
-                                        name="info-circle"
-                                        size={25}
-                                        color="light"
-                                        style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                                    />
-                                )}
-                            </Pressable>
-                        </Link>
-                    ),
+                    headerShown: false
+
                 }}
             />
-            <Stack.Screen
-                name="register"
-                options={{
-                    animation: "slide_from_right",
-                    title: 'Tab Two',
-                    headerLeft: () => (
-                        <Link href="(unauthenticated)" asChild>
-                            <Pressable>
-                                {({ pressed }) => (
-                                    <FontAwesome
-                                        name="info-circle"
-                                        size={25}
-                                        color="light"
-                                        style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                                    />
-                                )}
-                            </Pressable>
-                        </Link>
-                    ),
-                }}
-            />
+
         </Stack>
     );
 }
