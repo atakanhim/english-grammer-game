@@ -4,7 +4,7 @@ import { Stack, Tabs, useRouter, Redirect, useSegments, SplashScreen } from "exp
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useAuth } from "@/contexts/AuthProvider";
-import LoadingScreen from "./LoadingScreen";
+import LoadingScreen from "../../components/LoadingScreen";
 import { useFonts } from "expo-font";
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -17,6 +17,7 @@ const Layout = () => {
     const router = useRouter();
     const { authState } = useAuth();
     const [appReady, setAppReady] = useState(false)
+    const [onAnimationFinish, setOnAnimationFinish] = useState(false)
     const [loaded, error] = useFonts({
         SpaceMono: require('@/assets/fonts/SpaceMono-Regular.ttf'),
         ...FontAwesome.font,
@@ -30,20 +31,15 @@ const Layout = () => {
     //         router.replace("/")
     //     }
     // }, [authState])
-
     useEffect(() => {
         if (loaded && (authState?.authenticated === true || authState?.authenticated === false)) {
-
             SplashScreen.hideAsync();
             setAppReady(true);
         }
     }, [loaded, authState]);
-
-
-    if (!appReady) {
-        return <LoadingScreen />;
+    if (!onAnimationFinish) {
+        return <LoadingScreen appReady={appReady} setOnAnimationFinish={setOnAnimationFinish} />;
     }
-
     return (
         <Stack initialRouteName="(unauthenticated)" >
             <Stack.Screen redirect={authState?.authenticated !== true} name="(authenticated)" options={{ headerShown: false, animation: "flip" }} />

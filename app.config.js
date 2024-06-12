@@ -8,7 +8,7 @@ export default {
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/logon.png",
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },
@@ -49,6 +49,9 @@ export default {
       "router": {
         "origin": false
       },
+      "eas": {
+        "projectId": "cd558549-80a2-4300-95fc-63080beba4c7"
+      }
     }
   }
 }
