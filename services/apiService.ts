@@ -4,8 +4,8 @@ import * as SecureStore from 'expo-secure-store';
 const ACC_TOKEN_KEY = process.env.EXPO_PUBLIC_ACCESS_TOKEN_KEY ?? " ";
 const REF_TOKEN_KEY = process.env.EXPO_PUBLIC_REFRESH_TOKEN_KEY ?? " ";
 const USER_ID = process.env.EXPO_PUBLIC_USER_ID ?? "";
-//const API_URL =process.env.EXPO_PUBLIC_API_URL ?? "";
-const API_URL ="https://0c90-31-223-52-113.ngrok-free.app";
+const API_URL =process.env.EXPO_PUBLIC_API_URL ?? "";
+//const API_URL ="https://0c90-31-223-52-113.ngrok-free.app";
 
 const getAccessToken = async () => {
     return await SecureStore.getItemAsync(ACC_TOKEN_KEY);

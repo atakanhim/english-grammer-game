@@ -1,24 +1,32 @@
 import React, { useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthProvider';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, View, Text, TouchableOpacity, Image, Modal, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Image, Modal, TouchableWithoutFeedback, Pressable } from 'react-native';
 import i18n from '@/i18n'; // i18n configuration file import here
 import { useUser } from '@/contexts/UserProvider';
 import { useState } from 'react';
+import { GoogleSignin, GoogleSigninButton, User } from '@react-native-google-signin/google-signin';
 
 export default function TabSettingsScreen() {
-  const { onLogout } = useAuth();
+  const { onLogout, authState, onGoogleLogin } = useAuth();
   const { userState } = useUser();
   const { t } = useTranslation();
+  const [error, setError] = useState<any>()
   const [modalVisible, setModalVisible] = useState(false);
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng).then(() => {
       setModalVisible(false)
       // Actions to update the screen can be done here
     });
-
   };
 
+  const signIn = async () => {
+    try {
+      await onGoogleLogin!();
+    } catch (error) {
+      setError(error);
+    }
+  }
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.languageButton} onPress={() => setModalVisible(true)}>
@@ -39,7 +47,20 @@ export default function TabSettingsScreen() {
         <Text style={styles.label}>{t('rank')}:</Text>
         <Text style={styles.value}>{userState?.Rank}</Text>
       </View>
+      <View className='border border-black'>
+        <Pressable style={{ width: 150, height: 75 }} className='flex justify-center items-center'
+          onPress={signIn}>
 
+          <GoogleSigninButton
+            style={{ height: "100%", width: '100%' }}
+            size={GoogleSigninButton.Size.Icon}
+            color={GoogleSigninButton.Color.Dark}
+
+          />
+
+
+        </Pressable>
+      </View>
       <TouchableOpacity style={styles.logoutButton} onPress={onLogout}>
         <Text style={styles.logoutText}>{t('logout')}</Text>
       </TouchableOpacity>
