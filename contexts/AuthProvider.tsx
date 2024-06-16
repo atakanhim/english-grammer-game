@@ -55,7 +55,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         try {
             await GoogleSignin.hasPlayServices();
             let response = await GoogleSignin.signIn();
+
             const res: TokenResponse = await loginWithGoogle(response.idToken!);
+
+
             login = true;
             await SecureStore.setItemAsync(ACC_TOKEN_KEY, res.token.accessToken);
             await SecureStore.setItemAsync(REF_TOKEN_KEY, res.token.refreshToken);
@@ -63,7 +66,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
             saveCurrentUser(result as any); // locale attım
 
         } catch (e) {
-            console.log(e);
+            console.log(e + "a");
         }
         finally {
             if (login)
