@@ -1,30 +1,97 @@
-import { View, Text, Pressable } from 'react-native';
 import React, { useState } from 'react';
+import { View, Text, Pressable } from 'react-native';
+import Animated, { Easing, useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 
-const BottomSideRender = ({ refresh, handleButtonPress, helpState, setHelpState }: any) => {
-    const [buttonPressed, setButtonPressed] = useState<boolean>(false)
+interface BottomSideRenderProps {
+    refresh: () => void;
+    handleButtonPress: () => void;
+    helpState: boolean;
+    setHelpState: (state: boolean) => void;
+}
+const BottomSideRender: React.FC<BottomSideRenderProps> = ({ refresh, handleButtonPress, helpState, setHelpState }) => {
+    const [buttonPressed, setButtonPressed] = useState<boolean>(false);
+
+    const scaleValue = useSharedValue(1);
+    const scaleValueYenile = useSharedValue(1);
+
+    const handlePressIn = (isRefreshButton: boolean = false) => {
+        if (isRefreshButton)
+            scaleValueYenile.value = withTiming(1.2, { duration: 1000, easing: Easing.out(Easing.exp) });
+        else
+            scaleValue.value = withTiming(1.2, { duration: 300, easing: Easing.out(Easing.exp) });
+    };
+
+    const handlePressOut = (isRefreshButton: boolean = false) => {
+        if (isRefreshButton)
+            scaleValueYenile.value = withTiming(1, { duration: 500, easing: Easing.in(Easing.exp) });
+        else
+            scaleValue.value = withTiming(1, { duration: 300, easing: Easing.in(Easing.exp) });
+    };
+
+    const animatedStyle = useAnimatedStyle(() => {
+        return {
+            transform: [{ scale: scaleValue.value }],
+        };
+    });
+    const animatedStyleYenile = useAnimatedStyle(() => {
+        return {
+            transform: [{ scale: scaleValueYenile.value }],
+        };
+    });
+
     return (
-        <View className="flex flex-col items-center justify-center">
-            <View className="flex flex-row justify-between w-full  mt-4">
+        <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', marginTop: 16 }}>
                 <View>
-                    <Pressable className="border h-10 border-blue-500 py-2 px-4 rounded-md" onPress={refresh}>
-                        <Text className="text-blue-500 text-center">Yenile</Text>
-                    </Pressable>
-                    {/* <Pressable className={` mt-2 py-2 px-4 rounded-full border   border-r-pink-600 border-t-green-600  border-b-purple-300 ${!buttonPressed && 'border-b-blue-600'}  `} onPress={() => setHelpState(!helpState)} onPressIn={() => setButtonPressed(!buttonPressed)} onPressOut={() => setButtonPressed(!buttonPressed)}>
-                        <Text className='text-md w-12 text-center  font-semibold text-pink-900'>{helpState ? 'Kapat' : 'Yardım'}</Text>
+                    <Pressable
+                        onPress={refresh}
+                        onPressIn={() => handlePressIn(true)}
+                        onPressOut={() => handlePressOut(true)}
+                    >
+                        <Animated.View style={[
+                            {
+                                borderColor: '#4299E1',
+                                backgroundColor: '#EBF8FF',
+                                borderWidth: 1,
+                                height: 40,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: 6,
+                                paddingHorizontal: 16,
+                            },
+                            animatedStyleYenile,
+                        ]}>
+                            <Text style={{ color: '#4299E1', textAlign: 'center' }}>Yenile</Text>
 
-                    </Pressable> */}
+                        </Animated.View>
+                    </Pressable>
                 </View>
 
-
-                <Pressable className="border h-10 border-green-500 py-2 px-4 rounded-md" onPress={handleButtonPress}>
-                    <Text className="text-green-500 text-center  ">Kontrol ET</Text>
+                <Pressable
+                    onPress={handleButtonPress}
+                    onPressIn={() => handlePressIn()}
+                    onPressOut={() => handlePressOut()}
+                >
+                    <Animated.View style={[
+                        {
+                            borderColor: '#10B981',
+                            backgroundColor: '#EBF8FF',
+                            borderWidth: 1,
+                            height: 40,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            borderRadius: 6,
+                            paddingHorizontal: 16,
+                        },
+                        animatedStyle,
+                    ]}>
+                        <Text style={{ color: '#10B981', textAlign: 'center' }}>Kontrol ET</Text>
+                    </Animated.View>
                 </Pressable>
-
             </View>
-        </View>
+        </View >
     );
 };
 
 export default BottomSideRender;
-

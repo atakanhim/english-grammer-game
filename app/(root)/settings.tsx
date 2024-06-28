@@ -31,21 +31,21 @@ export default function TabSettingsScreen() {
   const unauthFadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    if (modalVisible)
-      Animated.timing(authFadeAnim, {
-        toValue: 0,
-        duration: 0, // İlk yarı süre
-        useNativeDriver: true,
-      }).start(() => {
-        // İkinci animasyon: 0'dan 1'e
-        Animated.timing(authFadeAnim, {
-          toValue: 1,
-          duration: 1333, // İkinci yarı süre
-          useNativeDriver: true,
-        }).start();
-      });
 
-  }, [authState?.authenticated, authFadeAnim, modalVisible]);
+    Animated.timing(authFadeAnim, {
+      toValue: 0,
+      duration: 0, // İlk yarı süre
+      useNativeDriver: true,
+    }).start(() => {
+      // İkinci animasyon: 0'dan 1'e
+      Animated.timing(authFadeAnim, {
+        toValue: 1,
+        duration: 1333, // İkinci yarı süre
+        useNativeDriver: true,
+      }).start();
+    });
+
+  }, [authState?.authenticated, authFadeAnim]);
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng).then(() => {

@@ -24,7 +24,7 @@ export default function TabOneScreen() {
 
     // page refresh state
     const [refreshing, setRefreshing] = useState(false);
-
+    const [refreshed, setRefreshed] = useState(false);
     // arrays data
     const [falseIndexs, setFalseIndexs] = useState<any[]>([])
     const [randomData, setRandomData] = useState<SentenceData>();
@@ -52,6 +52,11 @@ export default function TabOneScreen() {
         selected: 'single'
     });
 
+
+    // slected indexs
+    const [selectedShuufleIndex, setSelectedShuufleIndex] = useState<number | null>(null);
+    const [selectedAnswerIndex, setSelectedAnswerIndex] = useState<number | null>(null);
+    // end
     const filterData = (data: SentenceData[]): SentenceData[] => {
         if (choosenLevel.selected === 'single' && choosenLevel.single !== Choosens.Random) {
             return data.filter(item => item.level === choosenLevel.single);
@@ -79,7 +84,8 @@ export default function TabOneScreen() {
         if (selectedData.wordEngAryResult)
             setShuffledResults(shuffle([...selectedData.wordEngAryResult]));
         setFalseIndexs([]);
-
+        setSelectedShuufleIndex(null);
+        setSelectedAnswerIndex(null);
     }
     const onRefresh = () => {
         setRefreshing(true);
@@ -119,11 +125,11 @@ export default function TabOneScreen() {
             setModalMessage('Please try again.');
             setModalButtonMessage('Try Again')
             setModalVisible(true);
+            setHelpState(true);
         }
     };
 
     // use effectss
-
     useEffect(() => {
         if (showChoosen == false)
             refresh();
@@ -133,12 +139,12 @@ export default function TabOneScreen() {
         controlDataResults();
     }, [answerData])
     useEffect(() => {
-        if (helpState === true) {
+        if (helpState === true && modalVisible === false) {
             setTimeout(() => {
                 setHelpState(false);
             }, 3000);
         }
-    }, [helpState])
+    }, [helpState, modalVisible])
     // use effects
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -153,12 +159,12 @@ export default function TabOneScreen() {
                 </View>
 
 
-                <View className="flex-1 w-full  border border-purple-300 " >
+                <View className="flex-1 w-full " >
                     <View className="px-10">
                         <TopSideRender randomData={randomData} />
                         <BottomSideRender helpState={helpState} setHelpState={setHelpState} refresh={refresh} handleButtonPress={handleButtonPress} />
                     </View>
-                    <MainGameContainer helpState={helpState} falseIndexs={falseIndexs} setFalseIndexs={setFalseIndexs} randomData={randomData} shuffledResults={shuffledResults} answerData={answerData} setAnswerData={setAnswerData} setShuffledResults={setShuffledResults} ></MainGameContainer>
+                    <MainGameContainer selectedAnswerIndex={selectedAnswerIndex} setSelectedAnswerIndex={setSelectedAnswerIndex} setSelectedShuufleIndex={setSelectedShuufleIndex} selectedShuufleIndex={selectedShuufleIndex} helpState={helpState} falseIndexs={falseIndexs} setFalseIndexs={setFalseIndexs} randomData={randomData} shuffledResults={shuffledResults} answerData={answerData} setAnswerData={setAnswerData} setShuffledResults={setShuffledResults} ></MainGameContainer>
                 </View>
                 <Modal
                     animationType="slide"
@@ -174,7 +180,6 @@ export default function TabOneScreen() {
                                 style={[styles.button, styles.buttonClose]}
                                 onPress={() => {
                                     setModalVisible(!modalVisible);
-                                    setHelpState(true)
                                 }}>
                                 <Text style={styles.textStyle}>{modalButtonMessage}</Text>
                             </Pressable>
