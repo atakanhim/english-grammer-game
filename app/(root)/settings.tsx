@@ -19,6 +19,7 @@ import {
   GoogleSigninButton,
   statusCodes
 } from "@react-native-google-signin/google-signin";
+import { Easing } from "react-native-reanimated";
 
 export default function TabSettingsScreen() {
   const { onLogout, authState, onGoogleLogin } = useAuth();
@@ -30,30 +31,21 @@ export default function TabSettingsScreen() {
   const unauthFadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    if (authState?.authenticated) {
-      Animated.timing(authFadeAnim, {
-        toValue: 1,
-        duration: 500,
-        useNativeDriver: true,
-      }).start();
-      Animated.timing(unauthFadeAnim, {
-        toValue: 0,
-        duration: 500,
-        useNativeDriver: true,
-      }).start();
-    } else {
+    if (modalVisible)
       Animated.timing(authFadeAnim, {
         toValue: 0,
-        duration: 500,
+        duration: 0, // İlk yarı süre
         useNativeDriver: true,
-      }).start();
-      Animated.timing(unauthFadeAnim, {
-        toValue: 1,
-        duration: 500,
-        useNativeDriver: true,
-      }).start();
-    }
-  }, [authState, authFadeAnim, unauthFadeAnim]);
+      }).start(() => {
+        // İkinci animasyon: 0'dan 1'e
+        Animated.timing(authFadeAnim, {
+          toValue: 1,
+          duration: 1333, // İkinci yarı süre
+          useNativeDriver: true,
+        }).start();
+      });
+
+  }, [authState?.authenticated, authFadeAnim, modalVisible]);
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng).then(() => {
@@ -99,7 +91,7 @@ export default function TabSettingsScreen() {
           </TouchableOpacity>
         </View>
       </Modal>
-      <Animated.View style={{ ...styles.animatedContainer, opacity: authFadeAnim, display: authState?.authenticated ? 'flex' : 'none' }}>
+      <Animated.View style={{ ...styles.animatedContainer, opacity: authFadeAnim }}>
         {authState?.authenticated && (
           <>
             <View style={styles.profileContainer}>
@@ -123,9 +115,6 @@ export default function TabSettingsScreen() {
             </TouchableOpacity>
           </>
         )}
-      </Animated.View>
-
-      <Animated.View style={{ ...styles.animatedContainer, opacity: unauthFadeAnim, display: authState?.authenticated ? 'none' : 'flex' }}>
         {!authState?.authenticated && (
           <View className="flex justify-center items-center mt-10 ">
             <View>
@@ -145,8 +134,6 @@ export default function TabSettingsScreen() {
           </View>
         )}
       </Animated.View>
-
-
 
     </View>
   );

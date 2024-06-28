@@ -10,10 +10,10 @@ const BottomSideRender = ({ refresh, handleButtonPress, helpState, setHelpState 
                     <Pressable className="border h-10 border-blue-500 py-2 px-4 rounded-md" onPress={refresh}>
                         <Text className="text-blue-500 text-center">Yenile</Text>
                     </Pressable>
-                    <Pressable className={` mt-2 py-2 px-4 rounded-full border   border-r-pink-600 border-t-green-600  border-b-purple-300 ${!buttonPressed && 'border-b-blue-600'}  `} onPress={() => setHelpState(!helpState)} onPressIn={() => setButtonPressed(!buttonPressed)} onPressOut={() => setButtonPressed(!buttonPressed)}>
+                    {/* <Pressable className={` mt-2 py-2 px-4 rounded-full border   border-r-pink-600 border-t-green-600  border-b-purple-300 ${!buttonPressed && 'border-b-blue-600'}  `} onPress={() => setHelpState(!helpState)} onPressIn={() => setButtonPressed(!buttonPressed)} onPressOut={() => setButtonPressed(!buttonPressed)}>
                         <Text className='text-md w-12 text-center  font-semibold text-pink-900'>{helpState ? 'Kapat' : 'Yardım'}</Text>
 
-                    </Pressable>
+                    </Pressable> */}
                 </View>
 
 

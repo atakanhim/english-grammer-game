@@ -58,7 +58,6 @@ const Layout = () => {
                     } else if (route.name === 'settings') {
                         return <FontAwesome name="cog" size={size} color={color} />;
                     }
-
                     return <FontAwesome name={"close"} size={size} color={color} />;
                 },
             })}

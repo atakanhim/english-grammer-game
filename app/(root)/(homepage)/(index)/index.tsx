@@ -132,7 +132,13 @@ export default function TabOneScreen() {
     useEffect(() => {
         controlDataResults();
     }, [answerData])
-
+    useEffect(() => {
+        if (helpState === true) {
+            setTimeout(() => {
+                setHelpState(false);
+            }, 3000);
+        }
+    }, [helpState])
     // use effects
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -147,7 +153,7 @@ export default function TabOneScreen() {
                 </View>
 
 
-                <View className="flex-1 w-full  border border-purple-300 rounded-[100px]" >
+                <View className="flex-1 w-full  border border-purple-300 " >
                     <View className="px-10">
                         <TopSideRender randomData={randomData} />
                         <BottomSideRender helpState={helpState} setHelpState={setHelpState} refresh={refresh} handleButtonPress={handleButtonPress} />
@@ -168,7 +174,7 @@ export default function TabOneScreen() {
                                 style={[styles.button, styles.buttonClose]}
                                 onPress={() => {
                                     setModalVisible(!modalVisible);
-
+                                    setHelpState(true)
                                 }}>
                                 <Text style={styles.textStyle}>{modalButtonMessage}</Text>
                             </Pressable>
