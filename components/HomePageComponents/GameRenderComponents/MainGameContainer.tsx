@@ -128,9 +128,9 @@ const MainGameContainer: React.FC<MainGameContainerProps> = ({
 
     const renderAnswerData = () => {
         return (
-            <View className='flex flex-row flex-wrap py-6 items-center justify-center'>
+            <View className='flex flex-row gap-x-5  flex-wrap px-3 py-6 items-center justify-center'>
                 {randomData?.wordEngAry?.map((word, index) => (
-                    <Pressable key={index} className='ml-5'>
+                    <Pressable key={index} className=''>
                         <Text className="p-1 font-light">{word}</Text>
                         <Animated.Text
                             style={[{
