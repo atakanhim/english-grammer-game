@@ -1,6 +1,6 @@
 export default {
   "expo": {
-    "name": "gramergameDevelopmentV2",
+    "name": "gramerGameV5",
     "slug": "gramergameV2",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -12,15 +12,10 @@ export default {
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },
-    "ios": {
-      "bundleIdentifier": "com.hm.grammergame",
-      "supportsTablet": true,
-      "googleServicesFile": process.env.GOOGLE_SERVICES_INFOPLIST
-    },
     "android": {
       "permissions": ["android.permission.SCHEDULE_EXACT_ALARM"],
       "package": "com.hm.grammergame",
-      "googleServicesFile": process.env.GOOGLE_SERVICES_JSON,
+      "googleServicesFile":  "./grammergamejson.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
