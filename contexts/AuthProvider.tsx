@@ -9,7 +9,8 @@ import { clearStorage, getUserId, saveCurrentUser, storage, updateUser } from "@
 
 const ACC_TOKEN_KEY = process.env.EXPO_PUBLIC_ACCESS_TOKEN_KEY ?? " ";
 const REF_TOKEN_KEY = process.env.EXPO_PUBLIC_REFRESH_TOKEN_KEY ?? " ";
-const AuthContext = createContext<Partial<AuthProps>>({}); interface AuthState {
+const AuthContext = createContext<Partial<AuthProps>>({});
+interface AuthState {
     authenticated: boolean | null;
 }
 interface AuthProps {
@@ -35,6 +36,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
                 });
                 // burda kontrol etmem lazım aslında token geçerliliğini ve sunucu şuan ayakta mı erişilebiliyor mu 
                 saveCurrentUser(await getUserWithId(getUserId()) as any | null | undefined); // locale attım
+                // localde olan user en güncel halini çeliyorum bu sırada hata alırsa zaten false donecek
+                //hata almaz ise 
                 await SecureStore.getItemAsync(ACC_TOKEN_KEY);
                 state = true;
             } catch (error) {
@@ -77,7 +80,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     };
     const onLogout = async () => {
         await logout();
-        clearStorage();
         setAuthState({
             authenticated: false
         });
