@@ -31,9 +31,13 @@ const Layout = () => {
             setAppReady(true);
         }
     }, [loaded, authState]);
+
+    /*
     if (!onAnimationFinish) {
         return <LoadingScreen appReady={appReady} setOnAnimationFinish={setOnAnimationFinish} />;
     }
+
+    */
     // Expo Router uses Error Boundaries to catch errors in the navigation tree.
     // useEffect(() => {
     //     if (authState?.authenticated == true) {

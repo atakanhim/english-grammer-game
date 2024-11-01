@@ -1,7 +1,7 @@
 export default {
   "expo": {
-    "name": "gramerGameV5",
-    "slug": "gramergameV2",
+    "name": "gramerGameV31",
+    "slug": "gramergameV31",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -15,7 +15,7 @@ export default {
     "android": {
       "permissions": ["android.permission.SCHEDULE_EXACT_ALARM"],
       "package": "com.hm.grammergame",
-      "googleServicesFile":  "./grammergamejson.json",
+      "googleServicesFile":  "./grammergamejson.json", // process.env.GRAMMERGAME_JSON,// for local build,eas icin ise boyle build,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -45,7 +45,7 @@ export default {
         "origin": false
       },
       "eas": {
-        "projectId": "cd558549-80a2-4300-95fc-63080beba4c7"
+        "projectId": "bc284ef0-722d-4ace-99f3-dc241fb0f640"
       }
     }
   }

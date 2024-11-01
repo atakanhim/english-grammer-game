@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, TextInput, Button } from 'react-native'
 import React, { useEffect, useState } from 'react'
+import { MotiView } from 'moti';
 import verbsjson from "@/constants/VerbsJson";
 const filterData = (data: IVerbs[]): IVerbs[] => {
     return data; // random (all data)
@@ -41,8 +42,18 @@ const verbsgame = () => {
             }
         }
     };
+
+    const handleSkip = () => {
+        fetchData(); // Fetch new random verb without checking answers
+    };
+
     return (
-        <View style={styles.container}>
+        <MotiView
+            style={styles.container}
+            from={{ opacity: 0, translateY: -50 }}
+            animate={{ opacity: 1, translateY: 0 }}
+            transition={{ type: 'timing', duration: 500 }}
+        >
             {randomVerb ? (
                 <View className='w-9/12'>
                     <Text style={styles.text}>Base Form: {randomVerb.base_form}</Text>
@@ -63,12 +74,13 @@ const verbsgame = () => {
                         />
                     </View>
                     <Button title="Kontrol Et" onPress={handleSubmit} />
-                    <Text style={styles.feedback}>{feedback}</Text>
+                    <Button title="Geç" onPress={handleSkip} />
+                    <Text className='text-green-500' >{feedback}</Text>
                 </View>
             ) : (
                 <Text>Loading...</Text>
             )}
-        </View>
+        </MotiView>
     )
 }
 const styles = StyleSheet.create({
