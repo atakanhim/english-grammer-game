@@ -15,7 +15,7 @@ export default {
     "android": {
       "permissions": ["android.permission.SCHEDULE_EXACT_ALARM"],
       "package": "com.hm.grammergame",
-      "googleServicesFile":  "./grammergamejson.json", // process.env.GRAMMERGAME_JSON,// for local build,eas icin ise boyle build,
+      "googleServicesFile":  "../DOCUMENTS/grammergamejson.json", // process.env.GRAMMERGAME_JSON,// for local build,eas icin ise boyle build,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
