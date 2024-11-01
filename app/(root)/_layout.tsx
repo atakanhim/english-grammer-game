@@ -14,7 +14,6 @@ export {
 } from 'expo-router';
 
 const Layout = () => {
-    const router = useRouter();
     const { authState } = useAuth();
     const [appReady, setAppReady] = useState(false)
     const [onAnimationFinish, setOnAnimationFinish] = useState(false)
@@ -25,26 +24,70 @@ const Layout = () => {
     useEffect(() => {
         if (error) throw error;
     }, [error]);
-    // Expo Router uses Error Boundaries to catch errors in the navigation tree.
-    // useEffect(() => {
-    //     if (authState?.authenticated == true) {
-    //         router.replace("/")
-    //     }
-    // }, [authState])
+
     useEffect(() => {
         if (loaded && (authState?.authenticated === true || authState?.authenticated === false)) {
             SplashScreen.hideAsync();
             setAppReady(true);
         }
     }, [loaded, authState]);
+
+    /*
     if (!onAnimationFinish) {
         return <LoadingScreen appReady={appReady} setOnAnimationFinish={setOnAnimationFinish} />;
     }
+
+    */
+    // Expo Router uses Error Boundaries to catch errors in the navigation tree.
+    // useEffect(() => {
+    //     if (authState?.authenticated == true) {
+    //         router.replace("/")
+    //     }
+    // }, [authState])
     return (
-        <Stack initialRouteName="(unauthenticated)" >
-            <Stack.Screen redirect={authState?.authenticated !== true} name="(authenticated)" options={{ headerShown: false, animation: "flip" }} />
-            <Stack.Screen name="(unauthenticated)" options={{ headerShown: false, animation: "flip" }} />
-        </Stack>
+        // <Stack initialRouteName="(unauthenticated)" >
+        //     <Stack.Screen redirect={authState?.authenticated !== true} name="(authenticated)" options={{ headerShown: false, animation: "flip" }} />
+        //     <Stack.Screen name="(unauthenticated)" options={{ headerShown: false, animation: "flip" }} />
+        // </Stack>   
+        <Tabs
+            initialRouteName='(homepage)'
+            screenOptions={({ route }) => ({
+                tabBarActiveTintColor: 'light',
+                headerShown: true,
+                tabBarIcon: ({ color, size }) => {
+                    if (route.name === 'profile') {
+                        return <FontAwesome name="user" size={size} color={color} />;
+                    } else if (route.name === '(homepage)') {
+                        return <FontAwesome name="home" size={size} color={color} />;
+                    } else if (route.name === 'settings') {
+                        return <FontAwesome name="cog" size={size} color={color} />;
+                    }
+                    return <FontAwesome name={"close"} size={size} color={color} />;
+                },
+            })}
+        >
+            <Tabs.Screen
+                name="profile"
+                options={{
+                    headerShown: false
+                }}
+            />
+            <Tabs.Screen
+                name="(homepage)"
+                options={{
+                    headerShown: false,
+                    title: "Home",
+                }}
+            />
+            <Tabs.Screen
+                name="settings"
+                options={{
+                    headerShown: false
+                }}
+            />
+        </Tabs>
+
+
     );
 };
 

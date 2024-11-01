@@ -22,6 +22,7 @@ export default function Layout() {
                         title: t('challenge'),
                     }}
                 />
+
                 <Drawer.Screen
                     name="createWord"
                     options={{
@@ -29,7 +30,13 @@ export default function Layout() {
                         title: t('createNewSentences'),
                     }}
                 />
-
+                <Drawer.Screen
+                    name="verbsgame"
+                    options={{
+                        drawerLabel: t('verbsgame'),
+                        title: t('verbsgame'),
+                    }}
+                />
             </Drawer>
         </GestureHandlerRootView>
     );
